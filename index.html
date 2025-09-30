@@ -19,41 +19,31 @@
         <a href="#studio">스튜디오 셀렉션</a>
         <a href="#checklist">체크리스트</a>
       </nav>
-      <button class="btn ghost" id="signup-trigger">회원가입</button>
+      <a class="btn ghost" href="signup.html">회원가입</a>
     </div>
   </header>
 
   <main>
     <section id="lookbook" class="lookbook spotlight">
-      <div class="container lookbook-inner">
-        <div class="lookbook-intro">
-          <p class="tag">LOOKBOOK LIVE</p>
-          <h1>첫 화면부터, 방송 가능한 셀렉션을 한눈에</h1>
-          <p class="section-subtitle">도매가 올린 표준화된 정보와 자동 룩시트로 셀러는 담고, 스튜디오는 곧바로 준비합니다.</p>
+      <div class="container">
+        <div class="lookbook-top">
+          <div class="lookbook-title">
+            <p class="tag">LOOKBOOK</p>
+            <h1>라이브 준비를 위한 셀렉션</h1>
+          </div>
           <div class="filter-group" role="group" aria-label="카테고리 필터">
             <button class="filter-btn active" data-filter="all">전체</button>
             <button class="filter-btn" data-filter="fashion">패션</button>
             <button class="filter-btn" data-filter="beauty">뷰티</button>
             <button class="filter-btn" data-filter="wellness">건기식</button>
             <button class="filter-btn" data-filter="goods">잡화</button>
-          </div>
-          <div class="lookbook-highlights">
-            <div class="highlight">
-              <span class="highlight-value">10</span>
-              <span class="highlight-label">파일럿 도매</span>
-            </div>
-            <div class="highlight">
-              <span class="highlight-value">4회</span>
-              <span class="highlight-label">주간 라이브</span>
-            </div>
-            <div class="highlight">
-              <span class="highlight-value">72h</span>
-              <span class="highlight-label">준비 리드타임</span>
-            </div>
+            <button class="filter-btn" data-filter="etc">기타</button>
           </div>
         </div>
 
         <div class="lookbook-grid" id="lookbook-grid" aria-live="polite"></div>
+        <div class="lookbook-loader" id="lookbook-loader" aria-hidden="true">다음 룩을 불러오는 중...</div>
+        <div id="lookbook-sentinel" class="lookbook-sentinel" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -179,101 +169,6 @@
       </div>
     </section>
 
-    <div id="signup-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="modal-backdrop" data-dismiss="modal"></div>
-      <div class="modal-panel" role="document">
-        <header class="modal-header">
-          <h2>회원가입</h2>
-          <button class="modal-close" data-dismiss="modal" aria-label="닫기">&times;</button>
-        </header>
-        <div class="modal-tabs" role="tablist">
-          <button id="tab-wholesale" class="modal-tab active" role="tab" aria-selected="true" aria-controls="wholesale-form" data-tab="wholesale">도매업체</button>
-          <button id="tab-seller" class="modal-tab" role="tab" aria-selected="false" aria-controls="seller-form" data-tab="seller">셀러</button>
-        </div>
-        <div class="modal-body">
-          <form class="signup-form active" id="wholesale-form" data-type="wholesale" role="tabpanel" aria-labelledby="tab-wholesale">
-            <div class="form-group">
-              <label for="wholesale-brand">상호명</label>
-              <input id="wholesale-brand" name="brand" type="text" placeholder="예) 루체 도매" required>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="wholesale-contact">담당자 연락처</label>
-                <input id="wholesale-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
-              </div>
-              <div class="form-group">
-                <label for="wholesale-email">이메일</label>
-                <input id="wholesale-email" name="email" type="email" placeholder="contact@example.com" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="wholesale-category">주요 카테고리</label>
-              <select id="wholesale-category" name="category" required>
-                <option value="">선택</option>
-                <option value="fashion">패션</option>
-                <option value="beauty">뷰티</option>
-                <option value="wellness">건기식</option>
-                <option value="goods">잡화</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="wholesale-url">온라인 쇼룸/인스타그램</label>
-              <input id="wholesale-url" name="channel" type="url" placeholder="https://">
-            </div>
-            <div class="form-group">
-              <label for="wholesale-strength">강점 소개</label>
-              <textarea id="wholesale-strength" name="notes" rows="4" placeholder="상품 퀄리티, 리오더 속도, 베스트 카테고리 등을 소개해주세요"></textarea>
-            </div>
-            <button class="btn primary" type="submit">도매 가입 신청</button>
-            <p class="form-feedback" id="wholesale-feedback" role="status" aria-live="polite"></p>
-          </form>
-
-          <form class="signup-form" id="seller-form" data-type="seller" role="tabpanel" aria-hidden="true" aria-labelledby="tab-seller">
-            <div class="form-group">
-              <label for="seller-brand">브랜드/셀러명</label>
-              <input id="seller-brand" name="brand" type="text" placeholder="예) 루체 스튜디오" required>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="seller-contact">연락처</label>
-                <input id="seller-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
-              </div>
-              <div class="form-group">
-                <label for="seller-email">이메일</label>
-                <input id="seller-email" name="email" type="email" placeholder="contact@example.com" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="seller-channel">주요 판매 채널</label>
-              <select id="seller-channel" name="channel" required>
-                <option value="">선택</option>
-                <option value="네이버 쇼핑라이브">네이버 쇼핑라이브</option>
-                <option value="카카오 쇼핑라이브">카카오 쇼핑라이브</option>
-                <option value="틱톡">틱톡</option>
-                <option value="자체몰">자체몰</option>
-                <option value="기타">기타</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="seller-experience">라이브 커머스 경험</label>
-              <select id="seller-experience" name="experience">
-                <option value="">선택</option>
-                <option value="none">처음이에요</option>
-                <option value="1-5">1~5회 진행</option>
-                <option value="6-10">6~10회 진행</option>
-                <option value="10+">10회 이상</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="seller-goal">첫 달 목표</label>
-              <textarea id="seller-goal" name="notes" rows="4" placeholder="방송 횟수, 매출 목표, 준비 중인 상품 라인 등을 적어주세요"></textarea>
-            </div>
-            <button class="btn secondary" type="submit">셀러 가입 신청</button>
-            <p class="form-feedback" id="seller-feedback" role="status" aria-live="polite"></p>
-          </form>
-        </div>
-      </div>
-    </div>
   </main>
 
   <footer class="site-footer">

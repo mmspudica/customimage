@@ -100,6 +100,13 @@ a {
   background: rgba(143, 104, 255, 0.1);
 }
 
+.btn.ghost.current {
+  background: var(--accent-strong);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--shadow);
+}
+
 .tag {
   display: inline-flex;
   align-items: center;
@@ -231,33 +238,26 @@ a {
 }
 
 .lookbook {
-  padding: 80px 0;
+  padding: 120px 0 90px;
 }
 
 .lookbook.spotlight {
-  padding: 140px 0 100px;
   background: radial-gradient(circle at top right, rgba(202, 166, 255, 0.28), transparent 55%);
 }
 
-.lookbook-inner {
-  display: grid;
-  grid-template-columns: minmax(260px, 340px) 1fr;
-  gap: 48px;
-  align-items: start;
-}
-
-.lookbook-intro {
-  position: sticky;
-  top: 110px;
+.lookbook-top {
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 24px;
+  margin-bottom: 36px;
 }
 
-.lookbook-intro h1 {
-  font-size: clamp(2rem, 3vw, 3.2rem);
+.lookbook-title h1 {
+  margin: 12px 0 0;
+  font-size: clamp(2rem, 3vw, 3.1rem);
   line-height: 1.2;
-  margin: 0;
 }
 
 .filter-group {
@@ -283,37 +283,108 @@ a {
   box-shadow: 0 8px 20px rgba(143, 104, 255, 0.12);
 }
 
-.lookbook-highlights {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.highlight {
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-  min-width: 110px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.highlight-value {
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
-.highlight-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
 .lookbook-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 28px;
+}
+
+.lookbook-loader {
+  display: none;
+  margin-top: 32px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.lookbook-loader.active {
+  display: block;
+}
+
+.lookbook-sentinel {
+  width: 100%;
+  height: 1px;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.signup-main {
+  background: var(--bg);
+  padding-bottom: 120px;
+}
+
+.signup-hero {
+  padding: 160px 0 80px;
+  background: radial-gradient(circle at top right, rgba(202, 166, 255, 0.25), transparent 60%);
+}
+
+.signup-hero-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow);
+  max-width: 720px;
+}
+
+.signup-section {
+  padding: 40px 0 0;
+}
+
+.signup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.signup-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 34px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.signup-card-header h3 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.signup-card-header p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+}
+
+.signup-card .signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .look-card {
@@ -454,8 +525,7 @@ a {
   padding: 90px 0;
 }
 
-.studio-form,
-.signup-form {
+.studio-form {
   background: var(--surface);
   border-radius: var(--radius-md);
   padding: 30px;
@@ -463,14 +533,6 @@ a {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.modal .signup-form {
-  display: none;
-}
-
-.modal .signup-form.active {
-  display: flex;
 }
 
 .form-group {
@@ -589,99 +651,6 @@ textarea:focus {
   padding-left: 20px;
 }
 
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  opacity: 0;
-  pointer-events: none;
-  transition: var(--transition);
-}
-
-.modal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 16, 32, 0.5);
-}
-
-.modal-panel {
-  position: relative;
-  z-index: 1;
-  width: min(520px, 92vw);
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 40px 80px rgba(17, 11, 32, 0.25);
-  padding: 32px;
-  transform: translateY(32px);
-  transition: var(--transition);
-}
-
-.modal.open .modal-panel {
-  transform: translateY(0);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--text-muted);
-}
-
-.modal-tabs {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.modal-tab {
-  flex: 1;
-  padding: 12px 18px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(143, 104, 255, 0.3);
-  background: rgba(248, 247, 246, 0.9);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.modal-tab.active {
-  background: var(--accent-strong);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: var(--shadow);
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-body.modal-open {
-  overflow: hidden;
-}
 
 .site-footer {
   padding: 60px 0;
@@ -720,19 +689,25 @@ body.modal-open {
     align-items: flex-start;
   }
 
-  .lookbook-inner {
+  .lookbook-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .signup-hero {
+    padding: 120px 0 60px;
+  }
+
+  .signup-hero-card {
+    padding: 28px;
+  }
+
+  .signup-grid {
     grid-template-columns: 1fr;
   }
 
-  .lookbook-intro {
-    position: static;
-  }
-
-  .lookbook-highlights {
-    order: 3;
-  }
-
-  .modal-panel {
+  .signup-card {
     padding: 26px;
   }
 }

@@ -1,4 +1,6 @@
-const lookbookData = [
+const LOOKS_PER_BATCH = 9;
+
+const lookbookCatalog = [
   {
     id: 'LB-F001',
     title: '루체 시그니처 린넨 셋업',
@@ -18,6 +20,26 @@ const lookbookData = [
     specs: '어깨 43 · 가슴 58 · 총장 118 · 코튼 100%',
     image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
     description: '바이어 수요 많은 데일리룩. 베스트컷 6장 자동 제공.',
+  },
+  {
+    id: 'LB-F003',
+    title: '소프트 플레어 가디건 세트',
+    category: 'fashion',
+    price: '도매 46,000',
+    fit: 'FREE (44-66)',
+    specs: '어깨 38 · 가슴 48 · 총장 52 · 레이온 70% 나일론 30%',
+    image: 'https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=600&q=80',
+    description: '룩시트 템플릿에 핏컷 4종 자동 배치. 베스트 컬러 추천 포함.',
+  },
+  {
+    id: 'LB-F004',
+    title: '레이스 머메이드 스커트',
+    category: 'fashion',
+    price: '도매 43,000',
+    fit: 'S/M/L',
+    specs: '허리 32/34/36 · 총장 83 · 폴리 70% 레이온 30%',
+    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
+    description: '사이즈별 실측과 라이브 코디 제안이 자동 기입됩니다.',
   },
   {
     id: 'LB-B101',
@@ -40,13 +62,23 @@ const lookbookData = [
     description: '컬러 스와치 이미지 자동 보정. 쇼호스트 스크립트 초안 포함.',
   },
   {
+    id: 'LB-B103',
+    title: '클리어 모이스처 크림',
+    category: 'beauty',
+    price: '도매 27,000',
+    fit: '50ml',
+    specs: '전성분 17종 · 피부 자극 테스트 완료 · 개봉 후 12개월',
+    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
+    description: '유효성분 강조 컷과 사용 가이드 카드가 자동 첨부됩니다.',
+  },
+  {
     id: 'LB-W201',
     title: '데일리 밸런스 프로틴 파우더',
     category: 'wellness',
     price: '도매 26,000',
     fit: '30회분',
     specs: '단백질 25g · 지방 2g · 알레르기: 우유, 대두 · 유통기한 10개월',
-    image: 'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1510626176961-4b37d0e12e3f?auto=format&fit=crop&w=600&q=80',
     description: '성분표와 1회 섭취량 인포그래픽 자동 생성.',
   },
   {
@@ -66,7 +98,7 @@ const lookbookData = [
     price: '도매 32,000',
     fit: 'ONE SIZE',
     specs: '가로 28 · 세로 20 · 폭 8 · 합성가죽 100%',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
     description: '3색 옵션 통일 배경 제공. 쇼룸 피팅컷 포함.',
   },
   {
@@ -79,46 +111,222 @@ const lookbookData = [
     image: 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=600&q=80',
     description: '패키징 컷과 라이브 착용컷 자동 정렬. 배송 리드타임 1일.',
   },
+  {
+    id: 'LB-X401',
+    title: '라이브 스튜디오 데코 패키지',
+    category: 'etc',
+    price: '도매 85,000',
+    fit: '세트 구성',
+    specs: '백드롭 2종 · 조명 소품 4종 · 설치 가이드 포함',
+    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
+    description: '촬영 존 세팅 체크리스트와 함께 배송되는 스튜디오 전용 패키지.',
+  },
+  {
+    id: 'LB-X402',
+    title: '룩북 촬영 어시스트 키트',
+    category: 'etc',
+    price: '도매 49,000',
+    fit: '하드케이스',
+    specs: '클립 6종 · 스티머 · 바디테이프 · 수선 도구 포함',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=600&q=80',
+    description: '라이브 직전 수정용 공구와 체크리스트가 패키지로 제공됩니다.',
+  },
 ];
+
+const lookbookState = {
+  filter: 'all',
+  cursors: new Map(),
+  grid: null,
+  loader: null,
+  sentinel: null,
+  observer: null,
+  isLoading: false,
+};
 
 const selection = new Map();
 
-function renderLookbook(filter = 'all') {
-  const grid = document.getElementById('lookbook-grid');
+function translateCategory(category) {
+  switch (category) {
+    case 'fashion':
+      return '패션';
+    case 'beauty':
+      return '뷰티';
+    case 'wellness':
+      return '건기식';
+    case 'goods':
+      return '잡화';
+    default:
+      return '기타';
+  }
+}
+
+function getLookbookSource(filter) {
+  if (filter === 'all') {
+    return lookbookCatalog;
+  }
+
+  return lookbookCatalog.filter(item => item.category === filter);
+}
+
+function createLookCard(item, sequence = 1) {
+  const card = document.createElement('article');
+  card.className = 'look-card';
+
+  const sequenceLabel = sequence > 1 ? `${item.id}-${String(sequence).padStart(2, '0')}` : item.id;
+
+  card.innerHTML = `
+    <div class="look-card-header">
+      <span class="category-pill">${translateCategory(item.category)}</span>
+      <span class="look-id">${sequenceLabel}</span>
+    </div>
+    <img src="${item.image}" alt="${item.title}">
+    <div class="look-content">
+      <h3>${item.title}</h3>
+      <p class="look-description">${item.description}</p>
+      <div class="look-meta">
+        <span>${item.price}</span>
+        <span>${item.fit}</span>
+      </div>
+      <p class="look-specs">${item.specs}</p>
+      <button class="btn secondary" data-add="${item.id}">셀렉션 담기</button>
+    </div>`;
+
+  return card;
+}
+
+function appendLookbookBatch(filter, count = LOOKS_PER_BATCH) {
+  const { grid, loader } = lookbookState;
+  if (!grid) return false;
+
+  const source = getLookbookSource(filter);
+  if (!source.length || lookbookState.isLoading) {
+    return false;
+  }
+
+  lookbookState.isLoading = true;
+  if (loader) {
+    loader.classList.add('active');
+  }
+
+  const fragment = document.createDocumentFragment();
+  const startIndex = lookbookState.cursors.get(filter) || 0;
+
+  for (let index = 0; index < count; index += 1) {
+    const pointer = startIndex + index;
+    const baseItem = source[pointer % source.length];
+    const sequence = Math.floor(pointer / source.length) + 1;
+    fragment.appendChild(createLookCard(baseItem, sequence));
+  }
+
+  grid.appendChild(fragment);
+  lookbookState.cursors.set(filter, startIndex + count);
+
+  if (loader) {
+    loader.classList.remove('active');
+  }
+  lookbookState.isLoading = false;
+  return true;
+}
+
+function applyLookbookFilter(filter, setActiveButton) {
+  if (setActiveButton) {
+    setActiveButton(filter);
+  }
+
+  lookbookState.filter = filter;
+  lookbookState.isLoading = false;
+  lookbookState.cursors.set(filter, 0);
+
+  const { grid, loader, sentinel, observer } = lookbookState;
+  if (!grid) return;
+
   grid.innerHTML = '';
+  if (loader) {
+    loader.classList.remove('active');
+  }
 
-  const filtered = filter === 'all' ? lookbookData : lookbookData.filter(item => item.category === filter);
-
-  if (!filtered.length) {
+  const dataset = getLookbookSource(filter);
+  if (!dataset.length) {
     grid.innerHTML = '<p class="empty">해당 카테고리에 등록된 룩이 없습니다.</p>';
+    if (sentinel) {
+      sentinel.style.display = 'none';
+      if (observer) {
+        observer.unobserve(sentinel);
+      }
+    }
     return;
   }
 
-  filtered.forEach(item => {
-    const card = document.createElement('article');
-    card.className = 'look-card';
-    card.innerHTML = `
-      <div class="look-card-header">
-        <span class="category-pill">${translateCategory(item.category)}</span>
-        <span class="look-id">${item.id}</span>
-      </div>
-      <img src="${item.image}" alt="${item.title}">
-      <div class="look-content">
-        <h3>${item.title}</h3>
-        <p class="look-description">${item.description}</p>
-        <div class="look-meta">
-          <span>${item.price}</span>
-          <span>${item.fit}</span>
-        </div>
-        <p class="look-specs">${item.specs}</p>
-        <button class="btn secondary" data-add="${item.id}">셀렉션 담기</button>
-      </div>`;
-    grid.appendChild(card);
+  if (sentinel) {
+    sentinel.style.display = 'block';
+    if (observer) {
+      observer.unobserve(sentinel);
+      observer.observe(sentinel);
+    }
+  }
+
+  appendLookbookBatch(filter, LOOKS_PER_BATCH * 2);
+}
+
+function initFilters(onFilterChange) {
+  const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+  if (!buttons.length) {
+    return null;
+  }
+
+  const setActiveButton = filter => {
+    buttons.forEach(button => {
+      const isActive = button.dataset.filter === filter;
+      button.classList.toggle('active', isActive);
+    });
+  };
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter || 'all';
+      onFilterChange(filter);
+    });
   });
+
+  return setActiveButton;
+}
+
+function initializeLookbook() {
+  const grid = document.getElementById('lookbook-grid');
+  const sentinel = document.getElementById('lookbook-sentinel');
+
+  if (!grid || !sentinel) {
+    return;
+  }
+
+  lookbookState.grid = grid;
+  lookbookState.loader = document.getElementById('lookbook-loader');
+  lookbookState.sentinel = sentinel;
+
+  lookbookState.observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        appendLookbookBatch(lookbookState.filter);
+      }
+    });
+  }, { rootMargin: '360px 0px 0px 0px' });
+
+  lookbookState.observer.observe(sentinel);
+
+  let setActiveButton = null;
+  const handleFilterChange = filter => applyLookbookFilter(filter, setActiveButton);
+  setActiveButton = initFilters(handleFilterChange);
+
+  const defaultFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+  applyLookbookFilter(defaultFilter, setActiveButton);
 }
 
 function updateSelectionSummary() {
   const summary = document.getElementById('selection-summary');
+  if (!summary) {
+    return;
+  }
+
   if (!selection.size) {
     summary.innerHTML = '<h3>요약</h3><p>현재 담은 룩이 없습니다.</p>';
     return;
@@ -142,28 +350,23 @@ function updateSelectionSummary() {
     <button class="btn primary" id="selection-request">스튜디오 요청 작성</button>
   `;
 
-  summary.querySelector('#selection-request').addEventListener('click', () => {
-    document.getElementById('studio-request').scrollIntoView({ behavior: 'smooth' });
-  });
-}
-
-function translateCategory(category) {
-  switch (category) {
-    case 'fashion':
-      return '패션';
-    case 'beauty':
-      return '뷰티';
-    case 'wellness':
-      return '건기식';
-    case 'goods':
-      return '잡화';
-    default:
-      return '기타';
+  const requestButton = summary.querySelector('#selection-request');
+  if (requestButton) {
+    requestButton.addEventListener('click', () => {
+      const form = document.getElementById('studio-request');
+      if (form) {
+        form.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   }
 }
 
 function renderSelectionList() {
   const list = document.getElementById('selection-list');
+  if (!list) {
+    return;
+  }
+
   list.innerHTML = '';
 
   selection.forEach(item => {
@@ -192,28 +395,36 @@ function renderSelectionList() {
 
 function handleLookbookClick(event) {
   const target = event.target;
-  if (target.matches('[data-add]')) {
-    const id = target.getAttribute('data-add');
-    const item = lookbookData.find(product => product.id === id);
-    if (!item) return;
-    selection.set(id, item);
-    renderSelectionList();
-    target.classList.add('added');
-    target.textContent = '셀렉션 담김';
-    setTimeout(() => {
-      target.classList.remove('added');
-      target.textContent = '셀렉션 담기';
-    }, 1500);
+  if (!target.matches('[data-add]')) {
+    return;
   }
+
+  const id = target.getAttribute('data-add');
+  const item = lookbookCatalog.find(product => product.id === id);
+  if (!item) {
+    return;
+  }
+
+  selection.set(id, item);
+  renderSelectionList();
+
+  target.classList.add('added');
+  target.textContent = '셀렉션 담김';
+  setTimeout(() => {
+    target.classList.remove('added');
+    target.textContent = '셀렉션 담기';
+  }, 1500);
 }
 
 function handleSelectionClick(event) {
   const target = event.target;
-  if (target.matches('[data-remove]')) {
-    const id = target.getAttribute('data-remove');
-    selection.delete(id);
-    renderSelectionList();
+  if (!target.matches('[data-remove]')) {
+    return;
   }
+
+  const id = target.getAttribute('data-remove');
+  selection.delete(id);
+  renderSelectionList();
 }
 
 function exportLooksheet() {
@@ -244,73 +455,36 @@ function exportLooksheet() {
   URL.revokeObjectURL(url);
 }
 
-function initFilters() {
-  const buttons = document.querySelectorAll('.filter-btn');
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      buttons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      const filter = button.getAttribute('data-filter');
-      renderLookbook(filter);
-    });
-  });
+function initializeSelection() {
+  const lookbookGrid = document.getElementById('lookbook-grid');
+  if (lookbookGrid) {
+    lookbookGrid.addEventListener('click', handleLookbookClick);
+  }
+
+  const selectionList = document.getElementById('selection-list');
+  if (selectionList) {
+    selectionList.addEventListener('click', handleSelectionClick);
+    renderSelectionList();
+  }
+
+  const exportButton = document.getElementById('export-looksheet');
+  if (exportButton) {
+    exportButton.addEventListener('click', exportLooksheet);
+  }
 }
 
-function setupSignupModal() {
-  const modal = document.getElementById('signup-modal');
-  const trigger = document.getElementById('signup-trigger');
+function setupStudioForm() {
+  const form = document.getElementById('studio-request');
+  const feedback = document.getElementById('studio-feedback');
 
-  if (!modal || !trigger) return;
+  if (!form || !feedback) {
+    return;
+  }
 
-  const dismissElements = modal.querySelectorAll('[data-dismiss="modal"]');
-  const tabs = modal.querySelectorAll('.modal-tab');
-  const forms = modal.querySelectorAll('.signup-form');
-
-  const openModal = () => {
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('modal-open');
-  };
-
-  const closeModal = () => {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-  };
-
-  const activateTab = target => {
-    tabs.forEach(tab => {
-      const isActive = tab === target;
-      tab.classList.toggle('active', isActive);
-      tab.setAttribute('aria-selected', String(isActive));
-    });
-
-    forms.forEach(form => {
-      const isActive = form.dataset.type === target.dataset.tab;
-      form.classList.toggle('active', isActive);
-      form.setAttribute('aria-hidden', String(!isActive));
-    });
-  };
-
-  trigger.addEventListener('click', openModal);
-  dismissElements.forEach(element => {
-    element.addEventListener('click', closeModal);
-  });
-
-  modal.addEventListener('click', event => {
-    if (event.target.matches('.modal-backdrop')) {
-      closeModal();
-    }
-  });
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && modal.classList.contains('open')) {
-      closeModal();
-    }
-  });
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab));
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    feedback.textContent = '스튜디오 요청이 접수되었습니다. 운영팀이 승인 후 안내드립니다.';
+    form.reset();
   });
 }
 
@@ -318,7 +492,9 @@ function setupSignupForm(formId, feedbackId, type) {
   const form = document.getElementById(formId);
   const feedback = document.getElementById(feedbackId);
 
-  if (!form || !feedback) return;
+  if (!form || !feedback) {
+    return;
+  }
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -357,28 +533,14 @@ function setupSignupForm(formId, feedbackId, type) {
   });
 }
 
-function setupStudioForm() {
-  const form = document.getElementById('studio-request');
-  const feedback = document.getElementById('studio-feedback');
-
-  if (!form || !feedback) return;
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    feedback.textContent = '스튜디오 요청이 접수되었습니다. 운영팀이 승인 후 안내드립니다.';
-    form.reset();
-  });
+function setupStudioAndSignup() {
+  setupStudioForm();
+  setupSignupForm('wholesale-form', 'wholesale-feedback', 'wholesale');
+  setupSignupForm('seller-form', 'seller-feedback', 'seller');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderLookbook();
-  renderSelectionList();
-  document.getElementById('lookbook-grid').addEventListener('click', handleLookbookClick);
-  document.getElementById('selection-list').addEventListener('click', handleSelectionClick);
-  document.getElementById('export-looksheet').addEventListener('click', exportLooksheet);
-  initFilters();
-  setupSignupModal();
-  setupSignupForm('wholesale-form', 'wholesale-feedback', 'wholesale');
-  setupSignupForm('seller-form', 'seller-feedback', 'seller');
-  setupStudioForm();
+  initializeLookbook();
+  initializeSelection();
+  setupStudioAndSignup();
 });
