@@ -37,7 +37,6 @@
             <button class="filter-btn" data-filter="beauty">뷰티</button>
             <button class="filter-btn" data-filter="wellness">건기식</button>
             <button class="filter-btn" data-filter="goods">잡화</button>
-            <button class="filter-btn" data-filter="etc">기타</button>
           </div>
         </div>
 
@@ -46,6 +45,15 @@
         <div id="lookbook-sentinel" class="lookbook-sentinel" aria-hidden="true"></div>
       </div>
     </section>
+
+    <div id="look-modal" class="look-modal" aria-hidden="true">
+      <div class="look-modal__backdrop" data-modal-close></div>
+      <div class="look-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="look-modal-title" tabindex="-1">
+        <button type="button" class="look-modal__close" data-modal-close aria-label="닫기"><span aria-hidden="true">×</span></button>
+        <div class="look-modal__media" id="look-modal-media"></div>
+        <div class="look-modal__body" id="look-modal-body"></div>
+      </div>
+    </div>
 
     <section id="selection" class="selection">
       <div class="container">

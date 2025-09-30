@@ -1,4 +1,36 @@
 const LOOKS_PER_BATCH = 9;
+const LOOK_ROTATION_INTERVAL = 1000;
+
+const galleryPresets = {
+  fashion: [
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80',
+  ],
+  beauty: [
+    'https://images.unsplash.com/photo-1519666213635-f1aa0b1c43e0?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1526040652367-ac003a0475fe?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=600&q=80',
+  ],
+  wellness: [
+    'https://images.unsplash.com/photo-1510626176961-4b37d0e12e3f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556228578-249f8ab996fb?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1476158085676-120eb1c9edd8?auto=format&fit=crop&w=600&q=80',
+  ],
+  goods: [
+    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1518544889280-0f7f07b0c32a?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80',
+  ],
+};
 
 const lookbookCatalog = [
   {
@@ -8,7 +40,8 @@ const lookbookCatalog = [
     price: '도매 58,000',
     fit: 'FREE (44-66)',
     specs: '자켓 어깨 40 · 가슴 50 · 총장 70 / 팬츠 허리 33 · 총장 98 · 린넨 55% 코튼 45%',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.fashion[0],
+    gallery: galleryPresets.fashion,
     description: '라이브 베스트셀러. 셀러 피드백 평균 재방송율 92%.',
   },
   {
@@ -18,7 +51,8 @@ const lookbookCatalog = [
     price: '도매 49,000',
     fit: 'FREE (44-77)',
     specs: '어깨 43 · 가슴 58 · 총장 118 · 코튼 100%',
-    image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.fashion[2],
+    gallery: galleryPresets.fashion,
     description: '바이어 수요 많은 데일리룩. 베스트컷 6장 자동 제공.',
   },
   {
@@ -28,7 +62,8 @@ const lookbookCatalog = [
     price: '도매 46,000',
     fit: 'FREE (44-66)',
     specs: '어깨 38 · 가슴 48 · 총장 52 · 레이온 70% 나일론 30%',
-    image: 'https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.fashion[3],
+    gallery: galleryPresets.fashion,
     description: '룩시트 템플릿에 핏컷 4종 자동 배치. 베스트 컬러 추천 포함.',
   },
   {
@@ -38,7 +73,8 @@ const lookbookCatalog = [
     price: '도매 43,000',
     fit: 'S/M/L',
     specs: '허리 32/34/36 · 총장 83 · 폴리 70% 레이온 30%',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.fashion[2],
+    gallery: galleryPresets.fashion,
     description: '사이즈별 실측과 라이브 코디 제안이 자동 기입됩니다.',
   },
   {
@@ -48,7 +84,8 @@ const lookbookCatalog = [
     price: '도매 22,000',
     fit: '30ml × 2',
     specs: '주성분: 비타민C 10% · 히알루론산 · 6개월 유통기한',
-    image: 'https://images.unsplash.com/photo-1519666213635-f1aa0b1c43e0?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.beauty[0],
+    gallery: galleryPresets.beauty,
     description: '전성분/사용법 카드 자동 생성. 라이브 시연용 샘플 2세트 제공.',
   },
   {
@@ -58,7 +95,8 @@ const lookbookCatalog = [
     price: '도매 18,500',
     fit: '세트 구성',
     specs: '용량 4.5g × 5 · 사용기한 24개월 · 저자극 테스트 완료',
-    image: 'https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.beauty[1],
+    gallery: galleryPresets.beauty,
     description: '컬러 스와치 이미지 자동 보정. 쇼호스트 스크립트 초안 포함.',
   },
   {
@@ -68,7 +106,8 @@ const lookbookCatalog = [
     price: '도매 27,000',
     fit: '50ml',
     specs: '전성분 17종 · 피부 자극 테스트 완료 · 개봉 후 12개월',
-    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.beauty[2],
+    gallery: galleryPresets.beauty,
     description: '유효성분 강조 컷과 사용 가이드 카드가 자동 첨부됩니다.',
   },
   {
@@ -78,7 +117,8 @@ const lookbookCatalog = [
     price: '도매 26,000',
     fit: '30회분',
     specs: '단백질 25g · 지방 2g · 알레르기: 우유, 대두 · 유통기한 10개월',
-    image: 'https://images.unsplash.com/photo-1510626176961-4b37d0e12e3f?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.wellness[0],
+    gallery: galleryPresets.wellness,
     description: '성분표와 1회 섭취량 인포그래픽 자동 생성.',
   },
   {
@@ -88,7 +128,8 @@ const lookbookCatalog = [
     price: '도매 15,800',
     fit: '60구미',
     specs: '주요 성분: 비타민A,C,D,E · 합성착향료 무첨가 · 유통기한 12개월',
-    image: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.wellness[2],
+    gallery: galleryPresets.wellness,
     description: '보관/섭취 안내 영상 템플릿 제공. 반품률 2% 이하 기록.',
   },
   {
@@ -98,7 +139,8 @@ const lookbookCatalog = [
     price: '도매 32,000',
     fit: 'ONE SIZE',
     specs: '가로 28 · 세로 20 · 폭 8 · 합성가죽 100%',
-    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.goods[0],
+    gallery: galleryPresets.goods,
     description: '3색 옵션 통일 배경 제공. 쇼룸 피팅컷 포함.',
   },
   {
@@ -108,28 +150,9 @@ const lookbookCatalog = [
     price: '도매 12,000',
     fit: '3pcs SET',
     specs: '925 실버 도금 · 알레르기 방지 코팅',
-    image: 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=600&q=80',
+    image: galleryPresets.goods[1],
+    gallery: galleryPresets.goods,
     description: '패키징 컷과 라이브 착용컷 자동 정렬. 배송 리드타임 1일.',
-  },
-  {
-    id: 'LB-X401',
-    title: '라이브 스튜디오 데코 패키지',
-    category: 'etc',
-    price: '도매 85,000',
-    fit: '세트 구성',
-    specs: '백드롭 2종 · 조명 소품 4종 · 설치 가이드 포함',
-    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
-    description: '촬영 존 세팅 체크리스트와 함께 배송되는 스튜디오 전용 패키지.',
-  },
-  {
-    id: 'LB-X402',
-    title: '룩북 촬영 어시스트 키트',
-    category: 'etc',
-    price: '도매 49,000',
-    fit: '하드케이스',
-    specs: '클립 6종 · 스티머 · 바디테이프 · 수선 도구 포함',
-    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=600&q=80',
-    description: '라이브 직전 수정용 공구와 체크리스트가 패키지로 제공됩니다.',
   },
 ];
 
@@ -145,6 +168,14 @@ const lookbookState = {
 
 const selection = new Map();
 
+const lookModalState = {
+  root: null,
+  dialog: null,
+  media: null,
+  body: null,
+  activeItemId: null,
+};
+
 function translateCategory(category) {
   switch (category) {
     case 'fashion':
@@ -156,7 +187,7 @@ function translateCategory(category) {
     case 'goods':
       return '잡화';
     default:
-      return '기타';
+      return category;
   }
 }
 
@@ -169,27 +200,69 @@ function getLookbookSource(filter) {
 }
 
 function createLookCard(item, sequence = 1) {
+  const gallery = item.gallery && item.gallery.length ? item.gallery : [item.image];
+
   const card = document.createElement('article');
   card.className = 'look-card';
+  card.dataset.lookId = item.id;
+  card.dataset.sequence = sequence;
 
-  const sequenceLabel = sequence > 1 ? `${item.id}-${String(sequence).padStart(2, '0')}` : item.id;
+  const thumb = document.createElement('div');
+  thumb.className = 'look-thumb';
+  thumb.tabIndex = 0;
 
-  card.innerHTML = `
-    <div class="look-card-header">
-      <span class="category-pill">${translateCategory(item.category)}</span>
-      <span class="look-id">${sequenceLabel}</span>
-    </div>
-    <img src="${item.image}" alt="${item.title}">
-    <div class="look-content">
-      <h3>${item.title}</h3>
-      <p class="look-description">${item.description}</p>
-      <div class="look-meta">
-        <span>${item.price}</span>
-        <span>${item.fit}</span>
-      </div>
-      <p class="look-specs">${item.specs}</p>
-      <button class="btn secondary" data-add="${item.id}">셀렉션 담기</button>
-    </div>`;
+  const img = document.createElement('img');
+  img.src = gallery[0];
+  img.alt = item.title;
+
+  let rotationInterval = null;
+  let rotationIndex = 0;
+
+  const stopRotation = () => {
+    if (rotationInterval) {
+      clearInterval(rotationInterval);
+      rotationInterval = null;
+    }
+    rotationIndex = 0;
+    img.src = gallery[0];
+  };
+
+  const startRotation = () => {
+    if (gallery.length < 2 || rotationInterval) {
+      return;
+    }
+    rotationIndex = 1;
+    rotationInterval = setInterval(() => {
+      img.src = gallery[rotationIndex];
+      rotationIndex = (rotationIndex + 1) % gallery.length;
+    }, LOOK_ROTATION_INTERVAL);
+  };
+
+  thumb.addEventListener('mouseenter', startRotation);
+  thumb.addEventListener('mouseleave', stopRotation);
+  thumb.addEventListener('focus', startRotation);
+  thumb.addEventListener('blur', stopRotation);
+
+  thumb.appendChild(img);
+  card.appendChild(thumb);
+
+  const info = document.createElement('div');
+  info.className = 'look-info';
+  info.innerHTML = `
+    <h3>${item.title}</h3>
+    <p class="look-price">${item.price}</p>
+  `;
+  card.appendChild(info);
+
+  const action = document.createElement('button');
+  action.type = 'button';
+  action.className = 'look-action';
+  action.dataset.add = item.id;
+  action.textContent = '셀렉션 담기';
+  action.addEventListener('click', event => {
+    event.stopPropagation();
+  });
+  card.appendChild(action);
 
   return card;
 }
@@ -266,6 +339,91 @@ function applyLookbookFilter(filter, setActiveButton) {
   }
 
   appendLookbookBatch(filter, LOOKS_PER_BATCH * 2);
+}
+
+function closeLookModal() {
+  if (!lookModalState.root) {
+    return;
+  }
+
+  lookModalState.root.classList.remove('is-open');
+  lookModalState.root.setAttribute('aria-hidden', 'true');
+  lookModalState.activeItemId = null;
+
+  if (lookModalState.dialog) {
+    lookModalState.dialog.blur();
+  }
+}
+
+function openLookModal(item) {
+  if (!lookModalState.root || !lookModalState.media || !lookModalState.body) {
+    return;
+  }
+
+  const gallery = item.gallery && item.gallery.length ? item.gallery : [item.image];
+  lookModalState.media.innerHTML = gallery
+    .map((src, index) => `<img src="${src}" alt="${item.title} 상세 이미지 ${index + 1}">`)
+    .join('');
+
+  lookModalState.body.innerHTML = `
+    <header class="modal-header">
+      <p class="modal-category">${translateCategory(item.category)}</p>
+      <h2 id="look-modal-title">${item.title}</h2>
+    </header>
+    <p class="modal-price">${item.price}</p>
+    <p class="modal-fit">${item.fit}</p>
+    <p class="modal-description">${item.description}</p>
+    <div class="modal-specs">
+      <h3>상세 스펙</h3>
+      <p>${item.specs}</p>
+    </div>
+    <button type="button" class="btn primary modal-add" data-modal-add="${item.id}">셀렉션 담기</button>
+  `;
+
+  lookModalState.activeItemId = item.id;
+  lookModalState.root.classList.add('is-open');
+  lookModalState.root.setAttribute('aria-hidden', 'false');
+
+  if (lookModalState.dialog) {
+    lookModalState.dialog.focus();
+  }
+}
+
+function initializeLookModal() {
+  const root = document.getElementById('look-modal');
+  const media = document.getElementById('look-modal-media');
+  const body = document.getElementById('look-modal-body');
+  const dialog = root?.querySelector('.look-modal__dialog');
+
+  if (!root || !media || !body || !dialog) {
+    return;
+  }
+
+  lookModalState.root = root;
+  lookModalState.media = media;
+  lookModalState.body = body;
+  lookModalState.dialog = dialog;
+
+  root.addEventListener('click', event => {
+    const closeTrigger = event.target.closest('[data-modal-close]');
+    if (closeTrigger) {
+      event.preventDefault();
+      closeLookModal();
+      return;
+    }
+
+    const addTrigger = event.target.closest('[data-modal-add]');
+    if (addTrigger) {
+      const id = addTrigger.getAttribute('data-modal-add');
+      addToSelection(id, addTrigger);
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && root.classList.contains('is-open')) {
+      closeLookModal();
+    }
+  });
 }
 
 function initFilters(onFilterChange) {
@@ -393,13 +551,7 @@ function renderSelectionList() {
   updateSelectionSummary();
 }
 
-function handleLookbookClick(event) {
-  const target = event.target;
-  if (!target.matches('[data-add]')) {
-    return;
-  }
-
-  const id = target.getAttribute('data-add');
+function addToSelection(id, feedbackTarget) {
   const item = lookbookCatalog.find(product => product.id === id);
   if (!item) {
     return;
@@ -408,12 +560,37 @@ function handleLookbookClick(event) {
   selection.set(id, item);
   renderSelectionList();
 
-  target.classList.add('added');
-  target.textContent = '셀렉션 담김';
-  setTimeout(() => {
-    target.classList.remove('added');
-    target.textContent = '셀렉션 담기';
-  }, 1500);
+  if (feedbackTarget) {
+    feedbackTarget.classList.add('added');
+    feedbackTarget.textContent = '셀렉션 담김';
+    setTimeout(() => {
+      feedbackTarget.classList.remove('added');
+      feedbackTarget.textContent = '셀렉션 담기';
+    }, 1500);
+  }
+}
+
+function handleLookbookClick(event) {
+  const target = event.target;
+  if (target.matches('[data-add]')) {
+    event.stopPropagation();
+    const id = target.getAttribute('data-add');
+    addToSelection(id, target);
+    return;
+  }
+
+  const card = target.closest('.look-card');
+  if (!card) {
+    return;
+  }
+
+  const id = card.dataset.lookId;
+  const item = lookbookCatalog.find(product => product.id === id);
+  if (!item) {
+    return;
+  }
+
+  openLookModal(item);
 }
 
 function handleSelectionClick(event) {
@@ -541,6 +718,7 @@ function setupStudioAndSignup() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeLookbook();
+  initializeLookModal();
   initializeSelection();
   setupStudioAndSignup();
 });
