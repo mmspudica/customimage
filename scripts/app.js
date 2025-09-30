@@ -1,84 +1,83 @@
 const lookbookData = [
   {
-    id: 'LB-001',
-    title: '샤이닝 레이스 드레스',
-    category: 'dress',
+    id: 'LB-F001',
+    title: '루체 시그니처 린넨 셋업',
+    category: 'fashion',
+    price: '도매 58,000',
+    fit: 'FREE (44-66)',
+    specs: '자켓 어깨 40 · 가슴 50 · 총장 70 / 팬츠 허리 33 · 총장 98 · 린넨 55% 코튼 45%',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    description: '라이브 베스트셀러. 셀러 피드백 평균 재방송율 92%.',
+  },
+  {
+    id: 'LB-F002',
+    title: '크리스프 스트라이프 셔츠 드레스',
+    category: 'fashion',
     price: '도매 49,000',
-    fit: 'FREE (44-66)',
-    specs: '어깨 37 · 가슴 47 · 총장 118 · 폴리 92% 스판 8%',
-    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-002',
-    title: '엘리 캐시미어 가디건',
-    category: 'top',
-    price: '도매 39,000',
-    fit: 'FREE (44-66)',
-    specs: '어깨 40 · 가슴 52 · 총장 58 · 울 10% 나일론 50% 폴리 40%',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-003',
-    title: '미드나잇 트위드 자켓',
-    category: 'outer',
-    price: '도매 62,000',
-    fit: 'S / M',
-    specs: '어깨 38 · 가슴 49 · 총장 70 · 폴리 80% 울 20%',
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-004',
-    title: '시그니처 라인 스커트',
-    category: 'bottom',
-    price: '도매 29,000',
-    fit: 'S / M / L',
-    specs: '허리 33 · 엉덩이 46 · 총장 78 · 폴리 70% 레이온 30%',
-    image: 'https://images.unsplash.com/photo-1542293787938-4d2226c55b05?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-005',
-    title: '페어리 오간자 블라우스',
-    category: 'top',
-    price: '도매 32,000',
-    fit: 'FREE (44-66)',
-    specs: '어깨 36 · 가슴 50 · 총장 64 · 폴리 100%',
-    image: 'https://images.unsplash.com/photo-1475180098004-ca77a66827be?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-006',
-    title: '하이라이트 플레어 드레스',
-    category: 'dress',
-    price: '도매 55,000',
-    fit: 'S / M',
-    specs: '어깨 36 · 가슴 45 · 총장 112 · 폴리 95% 스판 5%',
-    image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-007',
-    title: '베이직 린넨 셔츠',
-    category: 'top',
-    price: '도매 27,000',
     fit: 'FREE (44-77)',
-    specs: '어깨 44 · 가슴 56 · 총장 70 · 린넨 55% 코튼 45%',
-    image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'LB-008',
-    title: '클라우드 퀼팅 패딩',
-    category: 'outer',
-    price: '도매 79,000',
-    fit: 'FREE (66-88)',
-    specs: '어깨 45 · 가슴 58 · 총장 78 · 폴리 100% (충전재: 웰론)',
+    specs: '어깨 43 · 가슴 58 · 총장 118 · 코튼 100%',
     image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+    description: '바이어 수요 많은 데일리룩. 베스트컷 6장 자동 제공.',
   },
   {
-    id: 'LB-009',
+    id: 'LB-B101',
+    title: '글로우업 세럼 듀오',
+    category: 'beauty',
+    price: '도매 22,000',
+    fit: '30ml × 2',
+    specs: '주성분: 비타민C 10% · 히알루론산 · 6개월 유통기한',
+    image: 'https://images.unsplash.com/photo-1519666213635-f1aa0b1c43e0?auto=format&fit=crop&w=600&q=80',
+    description: '전성분/사용법 카드 자동 생성. 라이브 시연용 샘플 2세트 제공.',
+  },
+  {
+    id: 'LB-B102',
+    title: '무드 업 립틴트 5종 키트',
+    category: 'beauty',
+    price: '도매 18,500',
+    fit: '세트 구성',
+    specs: '용량 4.5g × 5 · 사용기한 24개월 · 저자극 테스트 완료',
+    image: 'https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=600&q=80',
+    description: '컬러 스와치 이미지 자동 보정. 쇼호스트 스크립트 초안 포함.',
+  },
+  {
+    id: 'LB-W201',
+    title: '데일리 밸런스 프로틴 파우더',
+    category: 'wellness',
+    price: '도매 26,000',
+    fit: '30회분',
+    specs: '단백질 25g · 지방 2g · 알레르기: 우유, 대두 · 유통기한 10개월',
+    image: 'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=600&q=80',
+    description: '성분표와 1회 섭취량 인포그래픽 자동 생성.',
+  },
+  {
+    id: 'LB-W202',
+    title: '바이탈 멀티비타민 구미',
+    category: 'wellness',
+    price: '도매 15,800',
+    fit: '60구미',
+    specs: '주요 성분: 비타민A,C,D,E · 합성착향료 무첨가 · 유통기한 12개월',
+    image: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80',
+    description: '보관/섭취 안내 영상 템플릿 제공. 반품률 2% 이하 기록.',
+  },
+  {
+    id: 'LB-G301',
     title: '모던 트위스트 백',
-    category: 'accessory',
-    price: '도매 19,000',
+    category: 'goods',
+    price: '도매 32,000',
     fit: 'ONE SIZE',
-    specs: '가로 27 · 세로 18 · 폭 8 · 합성가죽 100%',
+    specs: '가로 28 · 세로 20 · 폭 8 · 합성가죽 100%',
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    description: '3색 옵션 통일 배경 제공. 쇼룸 피팅컷 포함.',
+  },
+  {
+    id: 'LB-G302',
+    title: '소노라 실버 이어커프 세트',
+    category: 'goods',
+    price: '도매 12,000',
+    fit: '3pcs SET',
+    specs: '925 실버 도금 · 알레르기 방지 코팅',
+    image: 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=600&q=80',
+    description: '패키징 컷과 라이브 착용컷 자동 정렬. 배송 리드타임 1일.',
   },
 ];
 
@@ -99,15 +98,17 @@ function renderLookbook(filter = 'all') {
     const card = document.createElement('article');
     card.className = 'look-card';
     card.innerHTML = `
+      <div class="look-card-header">
+        <span class="category-pill">${translateCategory(item.category)}</span>
+        <span class="look-id">${item.id}</span>
+      </div>
       <img src="${item.image}" alt="${item.title}">
       <div class="look-content">
-        <div>
-          <p class="tag">${item.id}</p>
-          <h3>${item.title}</h3>
-          <div class="look-meta">
-            <span>${item.price}</span>
-            <span>${item.fit}</span>
-          </div>
+        <h3>${item.title}</h3>
+        <p class="look-description">${item.description}</p>
+        <div class="look-meta">
+          <span>${item.price}</span>
+          <span>${item.fit}</span>
         </div>
         <p class="look-specs">${item.specs}</p>
         <button class="btn secondary" data-add="${item.id}">셀렉션 담기</button>
@@ -148,15 +149,13 @@ function updateSelectionSummary() {
 
 function translateCategory(category) {
   switch (category) {
-    case 'top':
-      return '상의';
-    case 'bottom':
-      return '하의';
-    case 'dress':
-      return '원피스';
-    case 'outer':
-      return '아우터';
-    case 'accessory':
+    case 'fashion':
+      return '패션';
+    case 'beauty':
+      return '뷰티';
+    case 'wellness':
+      return '건기식';
+    case 'goods':
       return '잡화';
     default:
       return '기타';
@@ -228,7 +227,8 @@ function exportLooksheet() {
 
   selection.forEach(item => {
     lines.push(`[${item.id}] ${item.title}`);
-    lines.push(`도매가: ${item.price} / 핏: ${item.fit}`);
+    lines.push(`카테고리: ${translateCategory(item.category)}`);
+    lines.push(`도매가: ${item.price} / 구성: ${item.fit}`);
     lines.push(`스펙: ${item.specs}`);
     lines.push('');
   });
@@ -244,22 +244,6 @@ function exportLooksheet() {
   URL.revokeObjectURL(url);
 }
 
-function handleFormSubmission(formId, feedbackId) {
-  const form = document.getElementById(formId);
-  const feedback = document.getElementById(feedbackId);
-
-  if (!form) return;
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
-    console.table(payload);
-    feedback.textContent = '신청이 접수되었습니다. 담당자가 24시간 내 연락드립니다.';
-    form.reset();
-  });
-}
-
 function initFilters() {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(button => {
@@ -272,14 +256,129 @@ function initFilters() {
   });
 }
 
+function setupSignupModal() {
+  const modal = document.getElementById('signup-modal');
+  const trigger = document.getElementById('signup-trigger');
+
+  if (!modal || !trigger) return;
+
+  const dismissElements = modal.querySelectorAll('[data-dismiss="modal"]');
+  const tabs = modal.querySelectorAll('.modal-tab');
+  const forms = modal.querySelectorAll('.signup-form');
+
+  const openModal = () => {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  };
+
+  const closeModal = () => {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  };
+
+  const activateTab = target => {
+    tabs.forEach(tab => {
+      const isActive = tab === target;
+      tab.classList.toggle('active', isActive);
+      tab.setAttribute('aria-selected', String(isActive));
+    });
+
+    forms.forEach(form => {
+      const isActive = form.dataset.type === target.dataset.tab;
+      form.classList.toggle('active', isActive);
+      form.setAttribute('aria-hidden', String(!isActive));
+    });
+  };
+
+  trigger.addEventListener('click', openModal);
+  dismissElements.forEach(element => {
+    element.addEventListener('click', closeModal);
+  });
+
+  modal.addEventListener('click', event => {
+    if (event.target.matches('.modal-backdrop')) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab));
+  });
+}
+
+function setupSignupForm(formId, feedbackId, type) {
+  const form = document.getElementById(formId);
+  const feedback = document.getElementById(feedbackId);
+
+  if (!form || !feedback) return;
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    feedback.textContent = '';
+    feedback.classList.remove('error');
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalLabel = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = '전송 중...';
+
+    const data = new FormData(form);
+    const payload = { type, ...Object.fromEntries(data.entries()) };
+
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('응답 오류');
+      }
+
+      feedback.textContent = '신청이 접수되었습니다. 담당자가 24시간 내 연락드립니다.';
+      feedback.classList.remove('error');
+      form.reset();
+    } catch (error) {
+      feedback.textContent = '전송에 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.';
+      feedback.classList.add('error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
+    }
+  });
+}
+
+function setupStudioForm() {
+  const form = document.getElementById('studio-request');
+  const feedback = document.getElementById('studio-feedback');
+
+  if (!form || !feedback) return;
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    feedback.textContent = '스튜디오 요청이 접수되었습니다. 운영팀이 승인 후 안내드립니다.';
+    form.reset();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderLookbook();
   renderSelectionList();
   document.getElementById('lookbook-grid').addEventListener('click', handleLookbookClick);
   document.getElementById('selection-list').addEventListener('click', handleSelectionClick);
   document.getElementById('export-looksheet').addEventListener('click', exportLooksheet);
-  handleFormSubmission('wholesale-form', 'wholesale-feedback');
-  handleFormSubmission('seller-form', 'seller-feedback');
-  handleFormSubmission('studio-request', 'studio-feedback');
   initFilters();
+  setupSignupModal();
+  setupSignupForm('wholesale-form', 'wholesale-feedback', 'wholesale');
+  setupSignupForm('seller-form', 'seller-feedback', 'seller');
+  setupStudioForm();
 });
