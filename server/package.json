@@ -1,0 +1,13 @@
+{
+  "name": "luce-lookbook-server",
+  "version": "1.0.0",
+  "description": "Express server for LUCE lookbook demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.6"
+  }
+}
