@@ -1,160 +1,8 @@
 const LOOKS_PER_BATCH = 9;
 const LOOK_ROTATION_INTERVAL = 1000;
 
-const galleryPresets = {
-  fashion: [
-    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80',
-  ],
-  beauty: [
-    'https://images.unsplash.com/photo-1519666213635-f1aa0b1c43e0?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1526040652367-ac003a0475fe?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=600&q=80',
-  ],
-  wellness: [
-    'https://images.unsplash.com/photo-1510626176961-4b37d0e12e3f?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1556228578-249f8ab996fb?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1476158085676-120eb1c9edd8?auto=format&fit=crop&w=600&q=80',
-  ],
-  goods: [
-    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1518544889280-0f7f07b0c32a?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80',
-  ],
-};
-
-const lookbookCatalog = [
-  {
-    id: 'LB-F001',
-    title: '루체 시그니처 린넨 셋업',
-    category: 'fashion',
-    price: '도매 58,000',
-    fit: 'FREE (44-66)',
-    specs: '자켓 어깨 40 · 가슴 50 · 총장 70 / 팬츠 허리 33 · 총장 98 · 린넨 55% 코튼 45%',
-    image: galleryPresets.fashion[0],
-    gallery: galleryPresets.fashion,
-    description: '라이브 베스트셀러. 셀러 피드백 평균 재방송율 92%.',
-  },
-  {
-    id: 'LB-F002',
-    title: '크리스프 스트라이프 셔츠 드레스',
-    category: 'fashion',
-    price: '도매 49,000',
-    fit: 'FREE (44-77)',
-    specs: '어깨 43 · 가슴 58 · 총장 118 · 코튼 100%',
-    image: galleryPresets.fashion[2],
-    gallery: galleryPresets.fashion,
-    description: '바이어 수요 많은 데일리룩. 베스트컷 6장 자동 제공.',
-  },
-  {
-    id: 'LB-F003',
-    title: '소프트 플레어 가디건 세트',
-    category: 'fashion',
-    price: '도매 46,000',
-    fit: 'FREE (44-66)',
-    specs: '어깨 38 · 가슴 48 · 총장 52 · 레이온 70% 나일론 30%',
-    image: galleryPresets.fashion[3],
-    gallery: galleryPresets.fashion,
-    description: '룩시트 템플릿에 핏컷 4종 자동 배치. 베스트 컬러 추천 포함.',
-  },
-  {
-    id: 'LB-F004',
-    title: '레이스 머메이드 스커트',
-    category: 'fashion',
-    price: '도매 43,000',
-    fit: 'S/M/L',
-    specs: '허리 32/34/36 · 총장 83 · 폴리 70% 레이온 30%',
-    image: galleryPresets.fashion[2],
-    gallery: galleryPresets.fashion,
-    description: '사이즈별 실측과 라이브 코디 제안이 자동 기입됩니다.',
-  },
-  {
-    id: 'LB-B101',
-    title: '글로우업 세럼 듀오',
-    category: 'beauty',
-    price: '도매 22,000',
-    fit: '30ml × 2',
-    specs: '주성분: 비타민C 10% · 히알루론산 · 6개월 유통기한',
-    image: galleryPresets.beauty[0],
-    gallery: galleryPresets.beauty,
-    description: '전성분/사용법 카드 자동 생성. 라이브 시연용 샘플 2세트 제공.',
-  },
-  {
-    id: 'LB-B102',
-    title: '무드 업 립틴트 5종 키트',
-    category: 'beauty',
-    price: '도매 18,500',
-    fit: '세트 구성',
-    specs: '용량 4.5g × 5 · 사용기한 24개월 · 저자극 테스트 완료',
-    image: galleryPresets.beauty[1],
-    gallery: galleryPresets.beauty,
-    description: '컬러 스와치 이미지 자동 보정. 쇼호스트 스크립트 초안 포함.',
-  },
-  {
-    id: 'LB-B103',
-    title: '클리어 모이스처 크림',
-    category: 'beauty',
-    price: '도매 27,000',
-    fit: '50ml',
-    specs: '전성분 17종 · 피부 자극 테스트 완료 · 개봉 후 12개월',
-    image: galleryPresets.beauty[2],
-    gallery: galleryPresets.beauty,
-    description: '유효성분 강조 컷과 사용 가이드 카드가 자동 첨부됩니다.',
-  },
-  {
-    id: 'LB-W201',
-    title: '데일리 밸런스 프로틴 파우더',
-    category: 'wellness',
-    price: '도매 26,000',
-    fit: '30회분',
-    specs: '단백질 25g · 지방 2g · 알레르기: 우유, 대두 · 유통기한 10개월',
-    image: galleryPresets.wellness[0],
-    gallery: galleryPresets.wellness,
-    description: '성분표와 1회 섭취량 인포그래픽 자동 생성.',
-  },
-  {
-    id: 'LB-W202',
-    title: '바이탈 멀티비타민 구미',
-    category: 'wellness',
-    price: '도매 15,800',
-    fit: '60구미',
-    specs: '주요 성분: 비타민A,C,D,E · 합성착향료 무첨가 · 유통기한 12개월',
-    image: galleryPresets.wellness[2],
-    gallery: galleryPresets.wellness,
-    description: '보관/섭취 안내 영상 템플릿 제공. 반품률 2% 이하 기록.',
-  },
-  {
-    id: 'LB-G301',
-    title: '모던 트위스트 백',
-    category: 'goods',
-    price: '도매 32,000',
-    fit: 'ONE SIZE',
-    specs: '가로 28 · 세로 20 · 폭 8 · 합성가죽 100%',
-    image: galleryPresets.goods[0],
-    gallery: galleryPresets.goods,
-    description: '3색 옵션 통일 배경 제공. 쇼룸 피팅컷 포함.',
-  },
-  {
-    id: 'LB-G302',
-    title: '소노라 실버 이어커프 세트',
-    category: 'goods',
-    price: '도매 12,000',
-    fit: '3pcs SET',
-    specs: '925 실버 도금 · 알레르기 방지 코팅',
-    image: galleryPresets.goods[1],
-    gallery: galleryPresets.goods,
-    description: '패키징 컷과 라이브 착용컷 자동 정렬. 배송 리드타임 1일.',
-  },
-];
+let lookbookCatalog = [];
+const lookbookIndex = new Map();
 
 const lookbookState = {
   filter: 'all',
@@ -164,6 +12,9 @@ const lookbookState = {
   sentinel: null,
   observer: null,
   isLoading: false,
+  isFetching: false,
+  hasLoaded: false,
+  loadError: null,
 };
 
 const selection = new Map();
@@ -188,6 +39,66 @@ function translateCategory(category) {
       return '잡화';
     default:
       return category;
+  }
+}
+
+function normalizeProduct(raw) {
+  const gallery = Array.isArray(raw.gallery)
+    ? raw.gallery.filter(url => typeof url === 'string' && url.trim().length).map(url => url.trim())
+    : [];
+
+  const image = raw.image || gallery[0] || '';
+  const normalizedGallery = gallery.length ? gallery : image ? [image] : [];
+
+  return {
+    id: raw.id,
+    title: raw.title,
+    category: raw.category,
+    price: raw.retailPrice ? `소매가 ${raw.retailPrice}` : '소매가 정보 없음',
+    retailPrice: raw.retailPrice || '',
+    fit: raw.fit || '',
+    specs: raw.specs || '',
+    description: raw.description || '',
+    image,
+    gallery: normalizedGallery,
+    supplier: raw.supplier || null,
+    createdAt: raw.createdAt || null,
+  };
+}
+
+async function reloadLookbookCatalog() {
+  lookbookState.isFetching = true;
+  lookbookState.loadError = null;
+
+  try {
+    if (lookbookState.loader) {
+      lookbookState.loader.classList.add('active');
+    }
+
+    const response = await fetch('/api/products');
+    if (!response.ok) {
+      throw new Error('상품 정보를 불러오는 중 문제가 발생했습니다.');
+    }
+
+    const payload = await response.json();
+    lookbookCatalog = Array.isArray(payload) ? payload.map(normalizeProduct) : [];
+    lookbookIndex.clear();
+    lookbookCatalog.forEach(item => {
+      lookbookIndex.set(item.id, item);
+    });
+    lookbookState.cursors.clear();
+    lookbookState.hasLoaded = true;
+  } catch (error) {
+    lookbookCatalog = [];
+    lookbookIndex.clear();
+    lookbookState.cursors.clear();
+    lookbookState.hasLoaded = true;
+    lookbookState.loadError = error.message || '상품 정보를 불러오지 못했습니다.';
+  } finally {
+    lookbookState.isFetching = false;
+    if (lookbookState.loader) {
+      lookbookState.loader.classList.remove('active');
+    }
   }
 }
 
@@ -268,11 +179,16 @@ function createLookCard(item, sequence = 1) {
 }
 
 function appendLookbookBatch(filter, count = LOOKS_PER_BATCH) {
-  const { grid, loader } = lookbookState;
-  if (!grid) return false;
+  const { grid, loader, sentinel } = lookbookState;
+  if (!grid || lookbookState.isLoading) return false;
 
   const source = getLookbookSource(filter);
-  if (!source.length || lookbookState.isLoading) {
+  const startIndex = lookbookState.cursors.get(filter) || 0;
+
+  if (!source.length || startIndex >= source.length) {
+    if (sentinel) {
+      sentinel.style.display = 'none';
+    }
     return false;
   }
 
@@ -282,23 +198,28 @@ function appendLookbookBatch(filter, count = LOOKS_PER_BATCH) {
   }
 
   const fragment = document.createDocumentFragment();
-  const startIndex = lookbookState.cursors.get(filter) || 0;
-
-  for (let index = 0; index < count; index += 1) {
-    const pointer = startIndex + index;
-    const baseItem = source[pointer % source.length];
-    const sequence = Math.floor(pointer / source.length) + 1;
-    fragment.appendChild(createLookCard(baseItem, sequence));
-  }
+  const slice = source.slice(startIndex, startIndex + count);
+  slice.forEach((item, index) => {
+    fragment.appendChild(createLookCard(item, startIndex + index + 1));
+  });
 
   grid.appendChild(fragment);
-  lookbookState.cursors.set(filter, startIndex + count);
+  const nextIndex = startIndex + slice.length;
+  lookbookState.cursors.set(filter, nextIndex);
 
   if (loader) {
     loader.classList.remove('active');
   }
   lookbookState.isLoading = false;
-  return true;
+
+  if (nextIndex >= source.length && sentinel) {
+    sentinel.style.display = 'none';
+    if (lookbookState.observer) {
+      lookbookState.observer.unobserve(sentinel);
+    }
+  }
+
+  return slice.length > 0;
 }
 
 function applyLookbookFilter(filter, setActiveButton) {
@@ -316,6 +237,22 @@ function applyLookbookFilter(filter, setActiveButton) {
   grid.innerHTML = '';
   if (loader) {
     loader.classList.remove('active');
+  }
+
+  if (!lookbookState.hasLoaded) {
+    grid.innerHTML = '<p class="empty">룩북 데이터를 불러오는 중입니다...</p>';
+    if (sentinel && observer) {
+      observer.unobserve(sentinel);
+    }
+    return;
+  }
+
+  if (lookbookState.loadError) {
+    grid.innerHTML = `<p class="empty">${lookbookState.loadError}</p>`;
+    if (sentinel && observer) {
+      observer.unobserve(sentinel);
+    }
+    return;
   }
 
   const dataset = getLookbookSource(filter);
@@ -338,7 +275,14 @@ function applyLookbookFilter(filter, setActiveButton) {
     }
   }
 
-  appendLookbookBatch(filter, LOOKS_PER_BATCH * 2);
+  appendLookbookBatch(filter, LOOKS_PER_BATCH);
+
+  if (sentinel) {
+    const cursor = lookbookState.cursors.get(filter) || 0;
+    if (cursor >= dataset.length) {
+      sentinel.style.display = 'none';
+    }
+  }
 }
 
 function closeLookModal() {
@@ -461,6 +405,9 @@ function initializeLookbook() {
   lookbookState.loader = document.getElementById('lookbook-loader');
   lookbookState.sentinel = sentinel;
 
+  grid.innerHTML = '<p class="empty">룩북 데이터를 불러오는 중입니다...</p>';
+  sentinel.style.display = 'none';
+
   lookbookState.observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -476,7 +423,14 @@ function initializeLookbook() {
   setActiveButton = initFilters(handleFilterChange);
 
   const defaultFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-  applyLookbookFilter(defaultFilter, setActiveButton);
+
+  reloadLookbookCatalog()
+    .catch(() => {
+      /* 에러 상태는 reloadLookbookCatalog 내부에서 관리 */
+    })
+    .finally(() => {
+      applyLookbookFilter(defaultFilter, setActiveButton);
+    });
 }
 
 function updateSelectionSummary() {
@@ -552,7 +506,7 @@ function renderSelectionList() {
 }
 
 function addToSelection(id, feedbackTarget) {
-  const item = lookbookCatalog.find(product => product.id === id);
+  const item = lookbookIndex.get(id);
   if (!item) {
     return;
   }
@@ -585,7 +539,7 @@ function handleLookbookClick(event) {
   }
 
   const id = card.dataset.lookId;
-  const item = lookbookCatalog.find(product => product.id === id);
+  const item = lookbookIndex.get(id);
   if (!item) {
     return;
   }
@@ -616,7 +570,8 @@ function exportLooksheet() {
   selection.forEach(item => {
     lines.push(`[${item.id}] ${item.title}`);
     lines.push(`카테고리: ${translateCategory(item.category)}`);
-    lines.push(`도매가: ${item.price} / 구성: ${item.fit}`);
+    const priceText = item.retailPrice ? `소매가: ${item.retailPrice}` : item.price;
+    lines.push(`${priceText} / 구성: ${item.fit}`);
     lines.push(`스펙: ${item.specs}`);
     lines.push('');
   });

@@ -880,3 +880,145 @@ textarea:focus {
     scroll-behavior: auto !important;
   }
 }
+
+.admin-body {
+  background: var(--bg);
+}
+
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.admin-main {
+  padding: 96px 0 64px;
+}
+
+.admin-section + .admin-section {
+  margin-top: 72px;
+}
+
+.admin-section__header {
+  margin-bottom: 32px;
+}
+
+.admin-form {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 20px;
+}
+
+.admin-form .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.admin-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-form label {
+  font-weight: 600;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 4px rgba(143, 104, 255, 0.16);
+}
+
+.form-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: -4px 0 0;
+}
+
+.product-table-wrapper {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table th,
+.product-table td {
+  padding: 18px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(226, 223, 245, 0.6);
+  font-size: 0.95rem;
+}
+
+.product-table th {
+  background: rgba(202, 166, 255, 0.1);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.product-table .empty-row td {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 36px 20px;
+}
+
+.product-name {
+  font-weight: 600;
+}
+
+.admin-footer {
+  margin-top: 80px;
+}
+
+.admin-form .btn.primary {
+  justify-self: start;
+  padding: 12px 28px;
+}
+
+.admin-form .form-feedback {
+  margin: 0;
+}
+
+.admin-form .form-feedback.error {
+  color: #d64545;
+}
+
+@media (max-width: 768px) {
+  .admin-form {
+    padding: 24px;
+  }
+
+  .product-table th,
+  .product-table td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+}
