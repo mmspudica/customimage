@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LUCE Planetary Logo</title>
+  <desc id="desc">Minimal black planet with surrounding ring representing the LUCE brand.</desc>
+  <circle cx="60" cy="50" r="24" fill="black"/>
+  <path d="M52 40c2.8-4.4 7.2-7 12.6-7 10.4 0 18.4 8 18.4 18.4 0 4.6-1.6 8.8-4.6 12.2" stroke="white" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M18 55c12.6-10.8 43-21.4 76-19.2 8.4.6 13.8 2.2 16.4 4.4 2.2 1.8 2.4 4.2.6 6.4-6 7.6-28.2 18.4-58.2 22.2-22.6 2.8-38.4.6-42.6-3.2-1.8-1.8-1.8-3.8.2-6.2z" stroke="black" stroke-width="6" stroke-linecap="round"/>
+  <path d="M18 55c12.6-10.8 43-21.4 76-19.2 8.4.6 13.8 2.2 16.4 4.4 2.2 1.8 2.4 4.2.6 6.4-6 7.6-28.2 18.4-58.2 22.2-22.6 2.8-38.4.6-42.6-3.2-1.8-1.8-1.8-3.8.2-6.2z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+  <text x="60" y="102" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="22" letter-spacing="0.24em" text-anchor="middle" fill="black">LUCE</text>
+</svg>

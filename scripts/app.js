@@ -48,7 +48,15 @@ function normalizeProduct(raw) {
     : [];
 
   const image = raw.image || gallery[0] || '';
-  const normalizedGallery = gallery.length ? gallery : image ? [image] : [];
+  const normalizedGallery = [];
+  if (image) {
+    normalizedGallery.push(image);
+  }
+  gallery.forEach(url => {
+    if (!normalizedGallery.includes(url)) {
+      normalizedGallery.push(url);
+    }
+  });
 
   return {
     id: raw.id,

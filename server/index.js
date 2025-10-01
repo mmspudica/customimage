@@ -2,15 +2,67 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
 const DB_PATH = path.join(DATA_DIR, 'luce.db');
+const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const db = new sqlite3.Database(DB_PATH);
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, UPLOAD_DIR);
+  },
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname || '').toLowerCase();
+    const safeExt = ext && ext.length <= 10 ? ext : '';
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${unique}${safeExt}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (_req, file, cb) => {
+    if (!file.mimetype || !file.mimetype.startsWith('image/')) {
+      cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', file.fieldname));
+      return;
+    }
+    cb(null, true);
+  },
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});
+
+const productUpload = upload.fields([
+  { name: 'thumbnail', maxCount: 1 },
+  { name: 'gallery', maxCount: 5 },
+]);
+
+function cleanupUploadedFiles(files) {
+  if (!files) {
+    return;
+  }
+
+  Object.values(files).forEach(fileGroup => {
+    fileGroup.forEach(file => {
+      if (file && file.path) {
+        fs.unlink(file.path, err => {
+          if (err) {
+            console.error('Failed to remove uploaded file', err);
+          }
+        });
+      }
+    });
+  });
+}
 
 db.serialize(() => {
   db.run(
@@ -170,130 +222,153 @@ app.get('/api/products', (_req, res) => {
 });
 
 app.post('/api/products', (req, res) => {
-  const {
-    supplierId,
-    title,
-    category,
-    retailPrice,
-    fit,
-    specs = '',
-    description = '',
-    images,
-  } = req.body || {};
+  productUpload(req, res, err => {
+    if (err) {
+      console.error('Product upload error', err);
+      const message =
+        err instanceof multer.MulterError
+          ? '이미지 업로드에 실패했습니다. 파일 수와 용량을 확인해주세요.'
+          : '이미지 업로드에 실패했습니다.';
+      return res.status(400).json({ error: message });
+    }
 
-  const numericSupplierId = Number(supplierId);
-  const normalizedTitle = typeof title === 'string' ? title.trim() : '';
-  const normalizedCategory = typeof category === 'string' ? category.trim() : '';
-  const normalizedRetailPrice = typeof retailPrice === 'string' ? retailPrice.trim() : '';
-  const normalizedFit = typeof fit === 'string' ? fit.trim() : '';
-  const normalizedSpecs = typeof specs === 'string' ? specs.trim() : '';
-  const normalizedDescription = typeof description === 'string' ? description.trim() : '';
+    const {
+      supplierId,
+      title,
+      category,
+      retailPrice,
+      fit,
+      specs = '',
+      description = '',
+    } = req.body || {};
 
-  const imageList = Array.isArray(images)
-    ? images
-    : typeof images === 'string'
-      ? images.split(/\r?\n|,/)
+    const numericSupplierId = Number(supplierId);
+    const normalizedTitle = typeof title === 'string' ? title.trim() : '';
+    const normalizedCategory = typeof category === 'string' ? category.trim() : '';
+    const normalizedRetailPrice = typeof retailPrice === 'string' ? retailPrice.trim() : '';
+    const normalizedFit = typeof fit === 'string' ? fit.trim() : '';
+    const normalizedSpecs = typeof specs === 'string' ? specs.trim() : '';
+    const normalizedDescription = typeof description === 'string' ? description.trim() : '';
+
+    const thumbnailFile = Array.isArray(req.files?.thumbnail)
+      ? req.files.thumbnail.find(file => file && file.filename)
+      : null;
+    const detailFiles = Array.isArray(req.files?.gallery)
+      ? req.files.gallery.filter(file => file && file.filename)
       : [];
 
-  const gallery = imageList
-    .map(url => (typeof url === 'string' ? url.trim() : ''))
-    .filter(url => url.length);
-
-  if (!numericSupplierId || Number.isNaN(numericSupplierId)) {
-    return res.status(400).json({ error: '공급업체를 선택해주세요.' });
-  }
-
-  if (!normalizedTitle || !normalizedCategory || !normalizedRetailPrice || !normalizedFit) {
-    return res.status(400).json({ error: '필수 정보를 모두 입력해주세요.' });
-  }
-
-  if (!VALID_CATEGORIES.has(normalizedCategory)) {
-    return res.status(400).json({ error: '지원하지 않는 카테고리입니다.' });
-  }
-
-  if (!gallery.length) {
-    return res.status(400).json({ error: '최소 한 개 이상의 이미지 URL이 필요합니다.' });
-  }
-
-  db.get(
-    `SELECT id, brand FROM signups WHERE id = ? AND type = 'wholesale'`,
-    [numericSupplierId],
-    (lookupErr, supplier) => {
-      if (lookupErr) {
-        console.error('Supplier lookup error', lookupErr);
-        return res.status(500).json({ error: '공급업체 검증 중 오류가 발생했습니다.' });
-      }
-
-      if (!supplier) {
-        return res.status(400).json({ error: '등록된 공급업체만 상품을 업로드할 수 있습니다.' });
-      }
-
-      db.run(
-        `INSERT INTO products (supplier_id, title, category, retail_price, fit, specs, description, primary_image, gallery)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          numericSupplierId,
-          normalizedTitle,
-          normalizedCategory,
-          normalizedRetailPrice,
-          normalizedFit,
-          normalizedSpecs,
-          normalizedDescription,
-          gallery[0],
-          JSON.stringify(gallery),
-        ],
-        function (insertErr) {
-          if (insertErr) {
-            console.error('Product insert error', insertErr);
-            return res.status(500).json({ error: '상품 저장 중 오류가 발생했습니다.' });
-          }
-
-          db.get(
-            `SELECT p.id, p.title, p.category, p.retail_price AS retailPrice, p.fit, p.specs, p.description,
-                    p.primary_image AS primaryImage, p.gallery, p.created_at AS createdAt,
-                    s.brand AS supplierBrand, s.id AS supplierId
-             FROM products p
-             LEFT JOIN signups s ON s.id = p.supplier_id
-             WHERE p.id = ?`,
-            [this.lastID],
-            (selectErr, row) => {
-              if (selectErr || !row) {
-                if (selectErr) {
-                  console.error('Product fetch error', selectErr);
-                }
-                return res.status(201).json({ id: this.lastID });
-              }
-
-              const gallery = parseGallery(row.gallery);
-              if (!gallery.length && row.primaryImage) {
-                gallery.push(row.primaryImage);
-              }
-
-              res.status(201).json({
-                id: `LB-${row.id}`,
-                title: row.title,
-                category: row.category,
-                retailPrice: row.retailPrice,
-                fit: row.fit,
-                specs: row.specs || '',
-                description: row.description || '',
-                image: row.primaryImage,
-                gallery,
-                supplier: {
-                  id: row.supplierId,
-                  brand: row.supplierBrand,
-                },
-                createdAt: row.createdAt,
-              });
-            }
-          );
-        }
-      );
+    if (!numericSupplierId || Number.isNaN(numericSupplierId)) {
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: '공급업체를 선택해주세요.' });
     }
-  );
+
+    if (!normalizedTitle || !normalizedCategory || !normalizedRetailPrice || !normalizedFit) {
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: '필수 정보를 모두 입력해주세요.' });
+    }
+
+    if (!VALID_CATEGORIES.has(normalizedCategory)) {
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: '지원하지 않는 카테고리입니다.' });
+    }
+
+    if (!thumbnailFile) {
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: '썸네일 이미지를 업로드해주세요.' });
+    }
+
+    if (!detailFiles.length) {
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: '상세 이미지를 최소 한 장 이상 업로드해주세요.' });
+    }
+
+    const thumbnailPath = `/uploads/${thumbnailFile.filename}`;
+    const galleryPaths = detailFiles.map(file => `/uploads/${file.filename}`).slice(0, 5);
+
+    db.get(
+      `SELECT id, brand FROM signups WHERE id = ? AND type = 'wholesale'`,
+      [numericSupplierId],
+      (lookupErr, supplier) => {
+        if (lookupErr) {
+          console.error('Supplier lookup error', lookupErr);
+          cleanupUploadedFiles(req.files);
+          return res.status(500).json({ error: '공급업체 검증 중 오류가 발생했습니다.' });
+        }
+
+        if (!supplier) {
+          cleanupUploadedFiles(req.files);
+          return res.status(400).json({ error: '등록된 공급업체만 상품을 업로드할 수 있습니다.' });
+        }
+
+        db.run(
+          `INSERT INTO products (supplier_id, title, category, retail_price, fit, specs, description, primary_image, gallery)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            numericSupplierId,
+            normalizedTitle,
+            normalizedCategory,
+            normalizedRetailPrice,
+            normalizedFit,
+            normalizedSpecs,
+            normalizedDescription,
+            thumbnailPath,
+            JSON.stringify(galleryPaths),
+          ],
+          function (insertErr) {
+            if (insertErr) {
+              console.error('Product insert error', insertErr);
+              cleanupUploadedFiles(req.files);
+              return res.status(500).json({ error: '상품 저장 중 오류가 발생했습니다.' });
+            }
+
+            db.get(
+              `SELECT p.id, p.title, p.category, p.retail_price AS retailPrice, p.fit, p.specs, p.description,
+                      p.primary_image AS primaryImage, p.gallery, p.created_at AS createdAt,
+                      s.brand AS supplierBrand, s.id AS supplierId
+               FROM products p
+               LEFT JOIN signups s ON s.id = p.supplier_id
+               WHERE p.id = ?`,
+              [this.lastID],
+              (selectErr, row) => {
+                if (selectErr || !row) {
+                  if (selectErr) {
+                    console.error('Product fetch error', selectErr);
+                  }
+                  return res.status(201).json({ id: this.lastID });
+                }
+
+                const gallery = parseGallery(row.gallery);
+                if (!gallery.length && row.primaryImage) {
+                  gallery.push(row.primaryImage);
+                }
+
+                res.status(201).json({
+                  id: `LB-${row.id}`,
+                  title: row.title,
+                  category: row.category,
+                  retailPrice: row.retailPrice,
+                  fit: row.fit,
+                  specs: row.specs || '',
+                  description: row.description || '',
+                  image: row.primaryImage,
+                  gallery,
+                  supplier: {
+                    id: row.supplierId,
+                    brand: row.supplierBrand,
+                  },
+                  createdAt: row.createdAt,
+                });
+              }
+            );
+          }
+        );
+      }
+    );
+  });
 });
 
 const staticDir = path.join(__dirname, '..');
+app.use('/uploads', express.static(UPLOAD_DIR));
 app.use(express.static(staticDir));
 
 app.get('*', (req, res) => {

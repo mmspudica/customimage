@@ -158,26 +158,48 @@ async function handleProductSubmit(event) {
   submitButton.textContent = '등록 중...';
 
   const formData = new FormData(form);
-  const payload = Object.fromEntries(formData.entries());
-  const images = (payload.images || '')
-    .split(/\r?\n/)
-    .map(url => url.trim())
-    .filter(url => url.length);
+
+  const textFields = ['supplierId', 'title', 'category', 'retailPrice', 'fit', 'specs', 'description'];
+  textFields.forEach(field => {
+    const value = formData.get(field);
+    if (typeof value === 'string') {
+      formData.set(field, value.trim());
+    }
+  });
+
+  const thumbnail = formData.get('thumbnail');
+  const galleryFiles = formData
+    .getAll('gallery')
+    .filter(file => file instanceof File && file.name);
+
+  if (!(thumbnail instanceof File) || !thumbnail.name) {
+    adminState.feedback.textContent = '썸네일 이미지를 업로드해주세요.';
+    adminState.feedback.classList.add('error');
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+    return;
+  }
+
+  if (!galleryFiles.length) {
+    adminState.feedback.textContent = '상세 이미지를 최소 1장 이상 업로드해주세요.';
+    adminState.feedback.classList.add('error');
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+    return;
+  }
+
+  if (galleryFiles.length > 5) {
+    adminState.feedback.textContent = '상세 이미지는 최대 5장까지 업로드할 수 있습니다.';
+    adminState.feedback.classList.add('error');
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+    return;
+  }
 
   try {
     const response = await fetch('/api/products', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        supplierId: payload.supplierId,
-        title: payload.title,
-        category: payload.category,
-        retailPrice: payload.retailPrice,
-        fit: payload.fit,
-        specs: payload.specs,
-        description: payload.description,
-        images,
-      }),
+      body: formData,
     });
 
     if (!response.ok) {

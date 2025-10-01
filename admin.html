@@ -12,7 +12,10 @@
 <body class="admin-body">
   <header class="site-header admin-header">
     <div class="container header-inner">
-      <div class="logo">LUCE ADMIN</div>
+      <a class="logo" href="/">
+        <img src="assets/luce-logo.svg" alt="LUCE" />
+        <span>ADMIN</span>
+      </a>
       <nav class="main-nav">
         <a href="/">룩북 보기</a>
         <a href="signup.html">회원가입</a>
@@ -27,11 +30,11 @@
           <div>
             <p class="tag">SUPPLIER</p>
             <h1>공급업체 상품 등록</h1>
-            <p class="section-subtitle">공급업체로 가입한 계정을 선택하고, 이미지 URL과 상품 정보를 입력해 룩북에 노출하세요.</p>
+            <p class="section-subtitle">공급업체로 가입한 계정을 선택하고, 썸네일과 상세 이미지를 업로드해 룩북에 노출하세요.</p>
           </div>
         </header>
 
-        <form id="product-form" class="admin-form" autocomplete="off">
+        <form id="product-form" class="admin-form" autocomplete="off" enctype="multipart/form-data">
           <div class="form-group">
             <label for="supplier-id">공급업체</label>
             <select id="supplier-id" name="supplierId" required>
@@ -77,10 +80,17 @@
             <textarea id="product-description" name="description" rows="3" placeholder="라이브 포인트, 준비 팁 등을 입력하세요"></textarea>
           </div>
 
-          <div class="form-group">
-            <label for="product-images">이미지 URL</label>
-            <textarea id="product-images" name="images" rows="4" placeholder="최소 1개의 이미지를 줄바꿈으로 입력하세요" required></textarea>
-            <p class="form-hint">최대 5장까지 권장 · 순서대로 룩북 썸네일과 상세 갤러리에 노출됩니다.</p>
+          <div class="form-row file-row">
+            <div class="form-group">
+              <label for="product-thumbnail">썸네일 이미지</label>
+              <input id="product-thumbnail" name="thumbnail" type="file" accept="image/*" required>
+              <p class="form-hint">룩북 카드에 노출되는 대표 이미지입니다.</p>
+            </div>
+            <div class="form-group">
+              <label for="product-gallery">상세 이미지</label>
+              <input id="product-gallery" name="gallery" type="file" accept="image/*" multiple required>
+              <p class="form-hint">최소 1장, 최대 5장까지 업로드할 수 있습니다.</p>
+            </div>
           </div>
 
           <button class="btn primary" type="submit">상품 등록</button>
@@ -125,7 +135,10 @@
   <footer class="site-footer admin-footer">
     <div class="container footer-inner">
       <div>
-        <div class="logo">LUCE LOOKBOOK</div>
+        <div class="logo">
+          <img src="assets/luce-logo.svg" alt="LUCE" />
+          <span>LOOKBOOK</span>
+        </div>
         <p>공급업체와 셀러를 연결하는 라이브 준비 플랫폼.</p>
       </div>
       <div class="footer-meta">
