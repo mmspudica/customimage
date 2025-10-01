@@ -44,6 +44,30 @@
           </div>
         </div>
 
+        <div class="lookbook-metrics" id="lookbook-metrics" aria-live="polite">
+          <article class="metric-card metric-card--primary">
+            <p class="metric-label">등록된 룩</p>
+            <p class="metric-value" id="metric-products">0</p>
+            <p class="metric-caption">최근 업데이트 <span id="metric-updated">-</span></p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">공급업체</p>
+            <p class="metric-value" id="metric-suppliers">0</p>
+            <p class="metric-caption">라이브 준비 완료</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">셀러 풀</p>
+            <p class="metric-value" id="metric-sellers">0</p>
+            <p class="metric-caption">셀렉션 대기</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">일반회원</p>
+            <p class="metric-value" id="metric-members">0</p>
+            <p class="metric-caption">소식 구독</p>
+          </article>
+          <p class="metric-error" id="metric-error" role="status" aria-live="polite" hidden>지표를 불러오지 못했습니다.</p>
+        </div>
+
         <div class="lookbook-grid" id="lookbook-grid" aria-live="polite"></div>
         <div class="lookbook-loader" id="lookbook-loader" aria-hidden="true">다음 룩을 불러오는 중...</div>
         <div id="lookbook-sentinel" class="lookbook-sentinel" aria-hidden="true"></div>

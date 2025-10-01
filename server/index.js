@@ -368,6 +368,34 @@ app.get('/api/products', (_req, res) => {
   );
 });
 
+app.get('/api/metrics', (_req, res) => {
+  db.get(
+    `SELECT
+        (SELECT COUNT(*) FROM products) AS productCount,
+        (SELECT COUNT(*) FROM signups WHERE type = 'supplier') AS supplierCount,
+        (SELECT COUNT(*) FROM signups WHERE type = 'seller') AS sellerCount,
+        (SELECT COUNT(*) FROM signups WHERE type = 'member') AS memberCount,
+        (SELECT MAX(created_at) FROM products) AS latestProduct
+     `,
+    (err, row) => {
+      if (err) {
+        console.error('DB metrics error', err);
+        return res.status(500).json({ error: '지표 정보를 불러오는 중 오류가 발생했습니다.' });
+      }
+
+      const metrics = {
+        products: row?.productCount ? Number(row.productCount) : 0,
+        suppliers: row?.supplierCount ? Number(row.supplierCount) : 0,
+        sellers: row?.sellerCount ? Number(row.sellerCount) : 0,
+        members: row?.memberCount ? Number(row.memberCount) : 0,
+        latestProduct: row?.latestProduct || null,
+      };
+
+      res.json(metrics);
+    }
+  );
+});
+
 app.post('/api/products', (req, res) => {
   const session = getSession(req);
   if (!session) {

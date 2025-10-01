@@ -17,6 +17,18 @@ const lookbookState = {
   loadError: null,
 };
 
+const metricsState = {
+  root: null,
+  values: {
+    products: null,
+    suppliers: null,
+    sellers: null,
+    members: null,
+  },
+  updated: null,
+  error: null,
+};
+
 const viewState = {
   sections: new Map(),
   navLinks: new Map(),
@@ -80,6 +92,90 @@ function normalizeProduct(raw) {
   };
 }
 
+function formatMetricNumber(value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return '0';
+  }
+
+  return value.toLocaleString('ko-KR');
+}
+
+function formatMetricDate(value) {
+  if (!value) {
+    return '-';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '-';
+  }
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+}
+
+function hideMetricError() {
+  if (metricsState.error) {
+    metricsState.error.hidden = true;
+  }
+}
+
+function showMetricError(message) {
+  if (!metricsState.error) {
+    return;
+  }
+
+  metricsState.error.textContent = message || '지표를 불러오지 못했습니다.';
+  metricsState.error.hidden = false;
+}
+
+async function loadLookbookMetrics() {
+  if (!metricsState.root) {
+    return;
+  }
+
+  hideMetricError();
+
+  try {
+    const response = await fetch('/api/metrics');
+    if (!response.ok) {
+      throw new Error('지표 정보를 불러오는 중 문제가 발생했습니다.');
+    }
+
+    const payload = await response.json();
+    const products = Number(payload?.products) || 0;
+    const suppliers = Number(payload?.suppliers) || 0;
+    const sellers = Number(payload?.sellers) || 0;
+    const members = Number(payload?.members) || 0;
+    const updated = payload?.latestProduct || null;
+
+    const { values, updated: updatedTarget } = metricsState;
+    if (values.products) values.products.textContent = formatMetricNumber(products);
+    if (values.suppliers) values.suppliers.textContent = formatMetricNumber(suppliers);
+    if (values.sellers) values.sellers.textContent = formatMetricNumber(sellers);
+    if (values.members) values.members.textContent = formatMetricNumber(members);
+    if (updatedTarget) {
+      updatedTarget.textContent = formatMetricDate(updated);
+    }
+  } catch (error) {
+    Object.values(metricsState.values).forEach(element => {
+      if (element) {
+        element.textContent = '-';
+      }
+    });
+
+    if (metricsState.updated) {
+      metricsState.updated.textContent = '-';
+    }
+
+    showMetricError(error.message);
+  }
+}
+
 async function reloadLookbookCatalog() {
   lookbookState.isFetching = true;
   lookbookState.loadError = null;
@@ -102,6 +198,12 @@ async function reloadLookbookCatalog() {
     });
     lookbookState.cursors.clear();
     lookbookState.hasLoaded = true;
+
+    if (metricsState.root) {
+      loadLookbookMetrics().catch(() => {
+        /* 이미 로딩 중 오류 처리는 내부에서 수행 */
+      });
+    }
   } catch (error) {
     lookbookCatalog = [];
     lookbookIndex.clear();
@@ -405,6 +507,25 @@ function initFilters(onFilterChange) {
   });
 
   return setActiveButton;
+}
+
+function initializeLookbookMetrics() {
+  const root = document.getElementById('lookbook-metrics');
+  if (!root) {
+    return;
+  }
+
+  metricsState.root = root;
+  metricsState.values.products = root.querySelector('#metric-products');
+  metricsState.values.suppliers = root.querySelector('#metric-suppliers');
+  metricsState.values.sellers = root.querySelector('#metric-sellers');
+  metricsState.values.members = root.querySelector('#metric-members');
+  metricsState.updated = root.querySelector('#metric-updated');
+  metricsState.error = root.querySelector('#metric-error');
+
+  loadLookbookMetrics().catch(() => {
+    /* 오류 처리는 loadLookbookMetrics 내부에서 수행 */
+  });
 }
 
 function initializeLookbook() {
@@ -784,6 +905,7 @@ function initializeViewNavigation() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeViewNavigation();
+  initializeLookbookMetrics();
   initializeLookbook();
   initializeLookModal();
   initializeSelection();
