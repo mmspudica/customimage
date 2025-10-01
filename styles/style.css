@@ -366,6 +366,10 @@ a {
   margin-top: 40px;
 }
 
+.signup-choice-grid {
+  align-items: stretch;
+}
+
 .signup-card {
   background: var(--surface);
   border-radius: var(--radius-lg);
@@ -374,6 +378,22 @@ a {
   display: flex;
   flex-direction: column;
   gap: 28px;
+}
+
+.signup-card--link {
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.signup-card--link:hover,
+.signup-card--link:focus {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+}
+
+.signup-card--link .btn {
+  align-self: flex-start;
 }
 
 .signup-card-header h3 {

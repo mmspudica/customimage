@@ -31,109 +31,39 @@
       <div class="container">
         <div class="signup-hero-card">
           <p class="tag">JOIN LUCE</p>
-          <h1>도매업체 · 셀러 회원가입</h1>
-          <p class="section-subtitle">도매는 룩을 올리고, 셀러는 셀렉션을 담습니다. 아래 양식으로 정보를 남겨주시면 운영팀이 24시간 안에 연락드립니다.</p>
+          <h1>회원 유형을 선택해주세요</h1>
+          <p class="section-subtitle">공급업체, 셀러, 일반회원 중 원하는 유형을 선택하면 맞춤 가입 페이지로 이동합니다.</p>
         </div>
       </div>
     </section>
 
-    <section class="signup-section" aria-labelledby="signup-heading">
+    <section class="signup-section" aria-labelledby="signup-choice-heading">
       <div class="container">
-        <h2 id="signup-heading" class="visually-hidden">회원가입 폼</h2>
-        <div class="signup-grid">
-          <article class="signup-card" id="wholesale">
-            <header class="signup-card-header">
-              <h3>도매업체 등록</h3>
-              <p>카테고리별 상품 정보와 룩시트를 빠르게 올릴 수 있도록 도와드립니다.</p>
-            </header>
-            <form class="signup-form" id="wholesale-form" data-type="wholesale">
-              <div class="form-group">
-                <label for="wholesale-brand">상호명</label>
-                <input id="wholesale-brand" name="brand" type="text" placeholder="예) 루체 도매" required>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="wholesale-contact">담당자 연락처</label>
-                  <input id="wholesale-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
-                </div>
-                <div class="form-group">
-                  <label for="wholesale-email">이메일</label>
-                  <input id="wholesale-email" name="email" type="email" placeholder="contact@example.com" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="wholesale-category">주요 카테고리</label>
-                <select id="wholesale-category" name="category" required>
-                  <option value="">선택</option>
-                  <option value="fashion">패션</option>
-                  <option value="beauty">뷰티</option>
-                  <option value="wellness">건기식</option>
-                  <option value="goods">잡화</option>
-                  <option value="etc">기타</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="wholesale-url">온라인 쇼룸/인스타그램</label>
-                <input id="wholesale-url" name="channel" type="url" placeholder="https://">
-              </div>
-              <div class="form-group">
-                <label for="wholesale-strength">강점 소개</label>
-                <textarea id="wholesale-strength" name="notes" rows="4" placeholder="상품 퀄리티, 리오더 속도, 베스트 카테고리를 소개해주세요"></textarea>
-              </div>
-              <button class="btn primary" type="submit">도매 가입 신청</button>
-              <p class="form-feedback" id="wholesale-feedback" role="status" aria-live="polite"></p>
-            </form>
-          </article>
+        <h2 id="signup-choice-heading" class="visually-hidden">회원 유형 선택</h2>
+        <div class="signup-grid signup-choice-grid">
+          <a class="signup-card signup-card--link" href="supplier-signup.html">
+            <div class="signup-card-header">
+              <h3>공급업체</h3>
+              <p>카테고리별 표준 정보를 갖춘 룩을 올려 셀러와 스튜디오에 빠르게 소개하세요.</p>
+            </div>
+            <span class="btn primary">공급업체 가입</span>
+          </a>
 
-          <article class="signup-card" id="seller">
-            <header class="signup-card-header">
-              <h3>셀러 등록</h3>
-              <p>셀렉션 담기와 스튜디오 예약을 위한 기본 정보를 남겨주세요.</p>
-            </header>
-            <form class="signup-form" id="seller-form" data-type="seller">
-              <div class="form-group">
-                <label for="seller-brand">브랜드/셀러명</label>
-                <input id="seller-brand" name="brand" type="text" placeholder="예) 루체 스튜디오" required>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="seller-contact">연락처</label>
-                  <input id="seller-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
-                </div>
-                <div class="form-group">
-                  <label for="seller-email">이메일</label>
-                  <input id="seller-email" name="email" type="email" placeholder="contact@example.com" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="seller-channel">주요 판매 채널</label>
-                <select id="seller-channel" name="channel" required>
-                  <option value="">선택</option>
-                  <option value="네이버 쇼핑라이브">네이버 쇼핑라이브</option>
-                  <option value="카카오 쇼핑라이브">카카오 쇼핑라이브</option>
-                  <option value="틱톡">틱톡</option>
-                  <option value="자체몰">자체몰</option>
-                  <option value="기타">기타</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="seller-experience">라이브 커머스 경험</label>
-                <select id="seller-experience" name="experience">
-                  <option value="">선택</option>
-                  <option value="none">처음이에요</option>
-                  <option value="1-5">1~5회 진행</option>
-                  <option value="6-10">6~10회 진행</option>
-                  <option value="10+">10회 이상</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="seller-goal">첫 달 목표</label>
-                <textarea id="seller-goal" name="notes" rows="4" placeholder="방송 횟수, 매출 목표, 준비 중인 상품 라인을 적어주세요"></textarea>
-              </div>
-              <button class="btn secondary" type="submit">셀러 가입 신청</button>
-              <p class="form-feedback" id="seller-feedback" role="status" aria-live="polite"></p>
-            </form>
-          </article>
+          <a class="signup-card signup-card--link" href="seller-signup.html">
+            <div class="signup-card-header">
+              <h3>셀러</h3>
+              <p>룩북 셀렉션과 스튜디오 요청을 위한 기본 정보를 등록해 방송 준비 속도를 높입니다.</p>
+            </div>
+            <span class="btn secondary">셀러 가입</span>
+          </a>
+
+          <a class="signup-card signup-card--link" href="member-signup.html">
+            <div class="signup-card-header">
+              <h3>일반회원</h3>
+              <p>라이브 커머스 인사이트와 LUCE 소식을 받아볼 수 있는 일반 회원으로 참여하세요.</p>
+            </div>
+            <span class="btn ghost">일반회원 가입</span>
+          </a>
         </div>
       </div>
     </section>

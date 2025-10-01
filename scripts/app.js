@@ -628,55 +628,69 @@ function setupStudioForm() {
   });
 }
 
-function setupSignupForm(formId, feedbackId, type) {
-  const form = document.getElementById(formId);
-  const feedback = document.getElementById(feedbackId);
+function setupSignupForms() {
+  const forms = document.querySelectorAll('form[data-signup-type]');
 
-  if (!form || !feedback) {
-    return;
-  }
+  forms.forEach(form => {
+    const { signupType: type, feedbackTarget } = form.dataset;
+    if (!type) {
+      return;
+    }
 
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
-    feedback.textContent = '';
-    feedback.classList.remove('error');
+    const feedback = feedbackTarget
+      ? document.getElementById(feedbackTarget)
+      : form.querySelector('.form-feedback');
 
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalLabel = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = '전송 중...';
+    if (!feedback) {
+      return;
+    }
 
-    const data = new FormData(form);
-    const payload = { type, ...Object.fromEntries(data.entries()) };
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      feedback.textContent = '';
+      feedback.classList.remove('error');
 
-    try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalLabel = submitButton ? submitButton.textContent : '';
 
-      if (!response.ok) {
-        throw new Error('응답 오류');
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = '전송 중...';
       }
 
-      feedback.textContent = '신청이 접수되었습니다. 담당자가 24시간 내 연락드립니다.';
-      feedback.classList.remove('error');
-      form.reset();
-    } catch (error) {
-      feedback.textContent = '전송에 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.';
-      feedback.classList.add('error');
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = originalLabel;
-    }
+      const data = new FormData(form);
+      const payload = { type, ...Object.fromEntries(data.entries()) };
+
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error('응답 오류');
+        }
+
+        feedback.textContent = '신청이 접수되었습니다. 담당자가 24시간 내 연락드립니다.';
+        feedback.classList.remove('error');
+        form.reset();
+      } catch (error) {
+        feedback.textContent = '전송에 실패했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.';
+        feedback.classList.add('error');
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = originalLabel;
+        }
+      }
+    });
   });
 }
 
 function setupStudioAndSignup() {
   setupStudioForm();
-  setupSignupForm('wholesale-form', 'wholesale-feedback', 'wholesale');
-  setupSignupForm('seller-form', 'seller-feedback', 'seller');
+  setupSignupForms();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

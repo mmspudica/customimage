@@ -101,6 +101,7 @@ db.serialize(() => {
 app.use(express.json());
 
 const VALID_CATEGORIES = new Set(['fashion', 'beauty', 'wellness', 'goods']);
+const SIGNUP_TYPES = new Set(['supplier', 'seller', 'member']);
 
 function parseGallery(raw) {
   if (!raw) {
@@ -125,12 +126,14 @@ app.post('/api/signup', (req, res) => {
     return res.status(400).json({ error: '필수 정보를 모두 입력해주세요.' });
   }
 
-  const normalizedType = type === 'wholesale' ? 'wholesale' : 'seller';
+  if (!SIGNUP_TYPES.has(type)) {
+    return res.status(400).json({ error: '유효하지 않은 가입 유형입니다.' });
+  }
 
   db.run(
     'INSERT INTO signups (type, brand, phone, email, category, channel, experience, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
-      normalizedType,
+      type,
       String(brand).trim(),
       String(phone).trim(),
       String(email).trim(),
@@ -165,7 +168,7 @@ app.get('/api/suppliers', (_req, res) => {
   db.all(
     `SELECT id, brand, phone, email, created_at
      FROM signups
-     WHERE type = 'wholesale'
+     WHERE type = 'supplier'
      ORDER BY created_at DESC`,
     (err, rows) => {
       if (err) {
@@ -286,7 +289,7 @@ app.post('/api/products', (req, res) => {
     const galleryPaths = detailFiles.map(file => `/uploads/${file.filename}`).slice(0, 5);
 
     db.get(
-      `SELECT id, brand FROM signups WHERE id = ? AND type = 'wholesale'`,
+      `SELECT id, brand FROM signups WHERE id = ? AND type = 'supplier'`,
       [numericSupplierId],
       (lookupErr, supplier) => {
         if (lookupErr) {
