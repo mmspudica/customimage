@@ -3,6 +3,7 @@ const fs = require('fs');
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,10 +11,15 @@ const DATA_DIR = path.join(__dirname, 'data');
 const DB_PATH = path.join(DATA_DIR, 'luce.db');
 const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 
+const SESSION_COOKIE = 'luce_session';
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const db = new sqlite3.Database(DB_PATH);
+
+const sessions = new Map();
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -119,6 +125,86 @@ function parseGallery(raw) {
   }
 }
 
+function parseCookies(req) {
+  const header = req.headers?.cookie;
+  if (!header) {
+    return {};
+  }
+
+  return header.split(';').reduce((acc, part) => {
+    const trimmed = part.trim();
+    if (!trimmed) {
+      return acc;
+    }
+
+    const separatorIndex = trimmed.indexOf('=');
+    if (separatorIndex === -1) {
+      acc[trimmed] = '';
+      return acc;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const value = trimmed.slice(separatorIndex + 1);
+    acc[key] = decodeURIComponent(value || '');
+    return acc;
+  }, {});
+}
+
+function getSession(req) {
+  const cookies = parseCookies(req);
+  const token = cookies[SESSION_COOKIE];
+  if (!token) {
+    return null;
+  }
+
+  const session = sessions.get(token);
+  if (!session) {
+    return null;
+  }
+
+  if (session.expiresAt <= Date.now()) {
+    sessions.delete(token);
+    return null;
+  }
+
+  session.expiresAt = Date.now() + SESSION_TTL_MS;
+  return { token, ...session };
+}
+
+function createSupplierSession(supplier) {
+  const token = crypto.randomBytes(24).toString('hex');
+  sessions.set(token, {
+    supplierId: supplier.id,
+    supplierBrand: supplier.brand,
+    supplierPhone: supplier.phone,
+    supplierEmail: supplier.email,
+    expiresAt: Date.now() + SESSION_TTL_MS,
+  });
+  return token;
+}
+
+function getSupplierPayload(session) {
+  return {
+    id: session.supplierId,
+    brand: session.supplierBrand,
+    phone: session.supplierPhone,
+    email: session.supplierEmail,
+  };
+}
+
+function setSessionCookie(res, token) {
+  res.cookie(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: SESSION_TTL_MS,
+    path: '/',
+  });
+}
+
+function clearSessionCookie(res) {
+  res.clearCookie(SESSION_COOKIE, { path: '/' });
+}
+
 app.post('/api/signup', (req, res) => {
   const { type, brand, phone, email, category = null, channel = null, experience = null, notes = null } = req.body || {};
 
@@ -151,6 +237,64 @@ app.post('/api/signup', (req, res) => {
       return res.status(201).json({ id: this.lastID });
     }
   );
+});
+
+app.post('/api/login', (req, res) => {
+  const { brand, phone, email } = req.body || {};
+
+  const normalizedBrand = typeof brand === 'string' ? brand.trim() : '';
+  const normalizedPhone = typeof phone === 'string' ? phone.trim() : '';
+  const normalizedEmail = typeof email === 'string' ? email.trim() : '';
+
+  if (!normalizedBrand || !normalizedPhone || !normalizedEmail) {
+    return res.status(400).json({ error: '브랜드, 연락처, 이메일을 모두 입력해주세요.' });
+  }
+
+  db.get(
+    `SELECT id, brand, phone, email
+       FROM signups
+      WHERE type = 'supplier' AND brand = ? AND phone = ? AND email = ?`,
+    [normalizedBrand, normalizedPhone, normalizedEmail],
+    (err, supplier) => {
+      if (err) {
+        console.error('Supplier login lookup error', err);
+        return res.status(500).json({ error: '로그인 처리 중 오류가 발생했습니다.' });
+      }
+
+      if (!supplier) {
+        return res.status(401).json({ error: '등록된 공급업체 정보와 일치하지 않습니다.' });
+      }
+
+      const token = createSupplierSession(supplier);
+      const sessionRecord = sessions.get(token);
+      if (!sessionRecord) {
+        sessions.delete(token);
+        return res.status(500).json({ error: '세션 생성에 실패했습니다.' });
+      }
+
+      setSessionCookie(res, token);
+      return res.json({ supplier: getSupplierPayload(sessionRecord) });
+    }
+  );
+});
+
+app.post('/api/logout', (req, res) => {
+  const session = getSession(req);
+  if (session) {
+    sessions.delete(session.token);
+  }
+
+  clearSessionCookie(res);
+  res.status(204).end();
+});
+
+app.get('/api/session', (req, res) => {
+  const session = getSession(req);
+  if (!session) {
+    return res.status(401).json({ authenticated: false });
+  }
+
+  res.json({ authenticated: true, supplier: getSupplierPayload(session) });
 });
 
 app.get('/api/signups', (_req, res) => {
@@ -225,6 +369,11 @@ app.get('/api/products', (_req, res) => {
 });
 
 app.post('/api/products', (req, res) => {
+  const session = getSession(req);
+  if (!session) {
+    return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
   productUpload(req, res, err => {
     if (err) {
       console.error('Product upload error', err);
@@ -236,7 +385,6 @@ app.post('/api/products', (req, res) => {
     }
 
     const {
-      supplierId,
       title,
       category,
       retailPrice,
@@ -245,7 +393,7 @@ app.post('/api/products', (req, res) => {
       description = '',
     } = req.body || {};
 
-    const numericSupplierId = Number(supplierId);
+    const numericSupplierId = Number(session.supplierId);
     const normalizedTitle = typeof title === 'string' ? title.trim() : '';
     const normalizedCategory = typeof category === 'string' ? category.trim() : '';
     const normalizedRetailPrice = typeof retailPrice === 'string' ? retailPrice.trim() : '';
@@ -371,6 +519,16 @@ app.post('/api/products', (req, res) => {
 });
 
 const staticDir = path.join(__dirname, '..');
+
+app.get('/admin.html', (req, res) => {
+  const session = getSession(req);
+  if (!session) {
+    return res.redirect('/login.html?redirect=admin.html');
+  }
+
+  res.sendFile(path.join(staticDir, 'admin.html'));
+});
+
 app.use('/uploads', express.static(UPLOAD_DIR));
 app.use(express.static(staticDir));
 

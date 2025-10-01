@@ -17,10 +17,10 @@
         <span class="logo__text">LUCE LOOKBOOK</span>
       </a>
       <nav class="main-nav">
-        <a href="#lookbook">룩북</a>
-        <a href="#selection">셀렉션</a>
-        <a href="#studio">스튜디오 셀렉션</a>
-        <a href="#checklist">체크리스트</a>
+        <a href="#lookbook" data-view-target="lookbook">룩북</a>
+        <a href="#selection" data-view-target="selection">셀렉션</a>
+        <a href="#studio" data-view-target="studio">스튜디오 셀렉션</a>
+        <a href="#checklist" data-view-target="checklist">체크리스트</a>
         <a href="admin.html">어드민</a>
       </nav>
       <a class="btn ghost" href="signup.html">회원가입</a>
@@ -28,7 +28,7 @@
   </header>
 
   <main>
-    <section id="lookbook" class="lookbook spotlight">
+    <section id="lookbook" class="lookbook spotlight" data-view-section="lookbook">
       <div class="container">
         <div class="lookbook-top">
           <div class="lookbook-title">
@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <section id="selection" class="selection">
+    <section id="selection" class="selection" data-view-section="selection" aria-hidden="true">
       <div class="container">
         <header class="section-header">
           <div>
@@ -80,7 +80,7 @@
       </div>
     </section>
 
-    <section id="studio" class="studio" aria-labelledby="studio-title">
+    <section id="studio" class="studio" aria-labelledby="studio-title" data-view-section="studio" aria-hidden="true">
       <div class="container">
         <header class="section-header">
           <div>
@@ -122,7 +122,7 @@
       </div>
     </section>
 
-    <section id="checklist" class="checklist">
+    <section id="checklist" class="checklist" data-view-section="checklist" aria-hidden="true">
       <div class="container">
         <header class="section-header">
           <div>

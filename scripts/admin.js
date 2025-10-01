@@ -1,9 +1,12 @@
 const adminState = {
-  suppliers: [],
+  supplier: null,
   products: [],
-  supplierSelect: null,
   tableBody: null,
   feedback: null,
+  supplierSummary: null,
+  supplierNameLabel: null,
+  supplierHiddenInput: null,
+  logoutButton: null,
 };
 
 function formatDate(value) {
@@ -38,19 +41,31 @@ function translateCategory(category) {
   }
 }
 
-function renderSuppliers() {
-  const { supplierSelect, suppliers } = adminState;
-  if (!supplierSelect) {
-    return;
+function redirectToLogin() {
+  const params = new URLSearchParams({ redirect: 'admin.html' });
+  window.location.replace(`login.html?${params.toString()}`);
+}
+
+function updateSupplierUI() {
+  const { supplier, supplierSummary, supplierNameLabel, supplierHiddenInput, logoutButton } = adminState;
+
+  if (supplierNameLabel) {
+    supplierNameLabel.textContent = supplier ? `${supplier.brand}` : '-';
   }
 
-  supplierSelect.innerHTML = '<option value="">공급업체를 선택하세요</option>';
-  suppliers.forEach(supplier => {
-    const option = document.createElement('option');
-    option.value = supplier.id;
-    option.textContent = `${supplier.brand} · ${supplier.phone}`;
-    supplierSelect.appendChild(option);
-  });
+  if (supplierSummary) {
+    supplierSummary.textContent = supplier
+      ? `${supplier.brand} · ${supplier.phone}`
+      : '로그인이 필요합니다';
+  }
+
+  if (supplierHiddenInput) {
+    supplierHiddenInput.value = supplier ? supplier.id : '';
+  }
+
+  if (logoutButton) {
+    logoutButton.disabled = !supplier;
+  }
 }
 
 function renderProducts() {
@@ -84,40 +99,18 @@ function renderProducts() {
   });
 }
 
-async function fetchSuppliers() {
-  try {
-    const response = await fetch('/api/suppliers');
-    if (!response.ok) {
-      throw new Error('failed to load suppliers');
-    }
-
-    adminState.suppliers = await response.json();
-    renderSuppliers();
-
-    if (adminState.feedback) {
-      if (!adminState.suppliers.length) {
-        adminState.feedback.textContent = '공급업체 가입 후 어드민에서 상품을 등록할 수 있습니다.';
-        adminState.feedback.classList.add('error');
-      } else if (adminState.feedback.classList.contains('error')) {
-        adminState.feedback.textContent = '';
-        adminState.feedback.classList.remove('error');
-      }
-    }
-  } catch (error) {
-    console.error(error);
-    adminState.suppliers = [];
-    renderSuppliers();
-
-    if (adminState.feedback) {
-      adminState.feedback.textContent = '공급업체 목록을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.';
-      adminState.feedback.classList.add('error');
-    }
-  }
-}
-
 async function fetchProducts() {
+  if (!adminState.supplier) {
+    return;
+  }
+
   try {
     const response = await fetch('/api/products');
+    if (response.status === 401) {
+      redirectToLogin();
+      return;
+    }
+
     if (!response.ok) {
       throw new Error('failed to load products');
     }
@@ -127,7 +120,10 @@ async function fetchProducts() {
       adminState.feedback.classList.remove('error');
     }
 
-    adminState.products = await response.json();
+    const payload = await response.json();
+    const supplierId = Number(adminState.supplier.id);
+    const normalized = Array.isArray(payload) ? payload : [];
+    adminState.products = normalized.filter(item => Number(item?.supplier?.id) === supplierId);
     renderProducts();
   } catch (error) {
     console.error(error);
@@ -150,16 +146,27 @@ async function handleProductSubmit(event) {
     return;
   }
 
-  adminState.feedback.textContent = '';
-  adminState.feedback.classList.remove('error');
+  if (!adminState.supplier) {
+    if (adminState.feedback) {
+      adminState.feedback.textContent = '공급업체 로그인 후 상품을 등록할 수 있습니다.';
+      adminState.feedback.classList.add('error');
+    }
+    return;
+  }
+
+  if (adminState.feedback) {
+    adminState.feedback.textContent = '';
+    adminState.feedback.classList.remove('error');
+  }
 
   submitButton.disabled = true;
   const originalLabel = submitButton.textContent;
   submitButton.textContent = '등록 중...';
 
   const formData = new FormData(form);
+  formData.set('supplierId', adminState.supplier.id);
 
-  const textFields = ['supplierId', 'title', 'category', 'retailPrice', 'fit', 'specs', 'description'];
+  const textFields = ['title', 'category', 'retailPrice', 'fit', 'specs', 'description'];
   textFields.forEach(field => {
     const value = formData.get(field);
     if (typeof value === 'string') {
@@ -173,24 +180,30 @@ async function handleProductSubmit(event) {
     .filter(file => file instanceof File && file.name);
 
   if (!(thumbnail instanceof File) || !thumbnail.name) {
-    adminState.feedback.textContent = '썸네일 이미지를 업로드해주세요.';
-    adminState.feedback.classList.add('error');
+    if (adminState.feedback) {
+      adminState.feedback.textContent = '썸네일 이미지를 업로드해주세요.';
+      adminState.feedback.classList.add('error');
+    }
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
     return;
   }
 
   if (!galleryFiles.length) {
-    adminState.feedback.textContent = '상세 이미지를 최소 1장 이상 업로드해주세요.';
-    adminState.feedback.classList.add('error');
+    if (adminState.feedback) {
+      adminState.feedback.textContent = '상세 이미지를 최소 1장 이상 업로드해주세요.';
+      adminState.feedback.classList.add('error');
+    }
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
     return;
   }
 
   if (galleryFiles.length > 5) {
-    adminState.feedback.textContent = '상세 이미지는 최대 5장까지 업로드할 수 있습니다.';
-    adminState.feedback.classList.add('error');
+    if (adminState.feedback) {
+      adminState.feedback.textContent = '상세 이미지는 최대 5장까지 업로드할 수 있습니다.';
+      adminState.feedback.classList.add('error');
+    }
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
     return;
@@ -202,6 +215,11 @@ async function handleProductSubmit(event) {
       body: formData,
     });
 
+    if (response.status === 401) {
+      redirectToLogin();
+      return;
+    }
+
     if (!response.ok) {
       const errorBody = await response.json().catch(() => ({}));
       const message = errorBody?.error || '상품 등록에 실패했습니다. 입력값을 확인해주세요.';
@@ -209,31 +227,81 @@ async function handleProductSubmit(event) {
     }
 
     form.reset();
-    adminState.feedback.textContent = '상품이 등록되었습니다. 룩북에서 바로 확인할 수 있습니다.';
-    adminState.feedback.classList.remove('error');
+    if (adminState.feedback) {
+      adminState.feedback.textContent = '상품이 등록되었습니다. 룩북에서 바로 확인할 수 있습니다.';
+      adminState.feedback.classList.remove('error');
+    }
 
     await fetchProducts();
   } catch (error) {
-    adminState.feedback.textContent = error.message || '상품 등록에 실패했습니다. 잠시 후 다시 시도해주세요.';
-    adminState.feedback.classList.add('error');
+    if (adminState.feedback) {
+      adminState.feedback.textContent = error.message || '상품 등록에 실패했습니다. 잠시 후 다시 시도해주세요.';
+      adminState.feedback.classList.add('error');
+    }
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
   }
 }
 
-function initAdminPage() {
-  adminState.supplierSelect = document.getElementById('supplier-id');
+async function handleLogout() {
+  try {
+    await fetch('/api/logout', { method: 'POST' });
+  } finally {
+    adminState.supplier = null;
+    updateSupplierUI();
+    redirectToLogin();
+  }
+}
+
+async function requireSupplierSession() {
+  try {
+    const response = await fetch('/api/session');
+    if (response.status === 401) {
+      throw new Error('unauthorized');
+    }
+
+    const payload = await response.json().catch(() => null);
+    if (!payload?.supplier) {
+      throw new Error('unauthorized');
+    }
+
+    adminState.supplier = payload.supplier;
+    updateSupplierUI();
+  } catch (error) {
+    redirectToLogin();
+    throw error;
+  }
+}
+
+async function initializeAdmin() {
   adminState.tableBody = document.getElementById('product-table-body');
   adminState.feedback = document.getElementById('product-feedback');
+  adminState.supplierSummary = document.getElementById('supplier-summary');
+  adminState.supplierNameLabel = document.getElementById('admin-supplier-name');
+  adminState.supplierHiddenInput = document.getElementById('supplier-id');
+  adminState.logoutButton = document.getElementById('logout-button');
+
+  updateSupplierUI();
+
+  if (adminState.logoutButton) {
+    adminState.logoutButton.addEventListener('click', handleLogout);
+  }
+
+  try {
+    await requireSupplierSession();
+  } catch (error) {
+    return;
+  }
 
   const form = document.getElementById('product-form');
   if (form) {
     form.addEventListener('submit', handleProductSubmit);
   }
 
-  fetchSuppliers();
   fetchProducts();
 }
 
-document.addEventListener('DOMContentLoaded', initAdminPage);
+document.addEventListener('DOMContentLoaded', () => {
+  initializeAdmin();
+});

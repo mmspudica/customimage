@@ -17,6 +17,12 @@ const lookbookState = {
   loadError: null,
 };
 
+const viewState = {
+  sections: new Map(),
+  navLinks: new Map(),
+  active: null,
+};
+
 const selection = new Map();
 
 const lookModalState = {
@@ -473,9 +479,10 @@ function updateSelectionSummary() {
   const requestButton = summary.querySelector('#selection-request');
   if (requestButton) {
     requestButton.addEventListener('click', () => {
+      showView('studio', true);
       const form = document.getElementById('studio-request');
       if (form) {
-        form.scrollIntoView({ behavior: 'smooth' });
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   }
@@ -693,7 +700,90 @@ function setupStudioAndSignup() {
   setupSignupForms();
 }
 
+function showView(name, updateHash = true) {
+  if (!viewState.sections.size) {
+    return;
+  }
+
+  const target = viewState.sections.has(name) ? name : 'lookbook';
+
+  if (viewState.active === target && updateHash) {
+    const desiredHash = `#${target}`;
+    if (window.location.hash !== desiredHash) {
+      history.replaceState(null, '', desiredHash);
+    }
+    return;
+  }
+
+  viewState.sections.forEach((section, key) => {
+    const isActive = key === target;
+    section.setAttribute('aria-hidden', String(!isActive));
+    if (isActive) {
+      section.classList.add('view-active');
+    } else {
+      section.classList.remove('view-active');
+    }
+  });
+
+  viewState.navLinks.forEach((link, key) => {
+    const isActive = key === target;
+    if (isActive) {
+      link.classList.add('is-active');
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.classList.remove('is-active');
+      link.removeAttribute('aria-current');
+    }
+  });
+
+  viewState.active = target;
+
+  if (updateHash) {
+    const desiredHash = `#${target}`;
+    if (window.location.hash !== desiredHash) {
+      history.replaceState(null, '', desiredHash);
+    }
+  }
+}
+
+function initializeViewNavigation() {
+  const sections = document.querySelectorAll('[data-view-section]');
+  sections.forEach(section => {
+    const name = section.dataset.viewSection;
+    if (!name) {
+      return;
+    }
+    viewState.sections.set(name, section);
+  });
+
+  const navLinks = document.querySelectorAll('.main-nav [data-view-target]');
+  navLinks.forEach(link => {
+    const name = link.dataset.viewTarget;
+    if (!name) {
+      return;
+    }
+    viewState.navLinks.set(name, link);
+
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      showView(name, true);
+    });
+  });
+
+  const initialHash = window.location.hash.replace('#', '');
+  const initialView = initialHash && viewState.sections.has(initialHash) ? initialHash : 'lookbook';
+  showView(initialView, false);
+
+  window.addEventListener('hashchange', () => {
+    const next = window.location.hash.replace('#', '');
+    if (viewState.sections.has(next)) {
+      showView(next, false);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initializeViewNavigation();
   initializeLookbook();
   initializeLookModal();
   initializeSelection();

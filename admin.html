@@ -30,16 +30,22 @@
           <div>
             <p class="tag">SUPPLIER</p>
             <h1>공급업체 상품 등록</h1>
-            <p class="section-subtitle">공급업체로 가입한 계정을 선택하고, 썸네일과 상세 이미지를 업로드해 룩북에 노출하세요.</p>
+            <p class="section-subtitle">공급업체 계정으로 로그인한 뒤 썸네일과 상세 이미지를 업로드하면 룩북에 즉시 반영됩니다.</p>
+          </div>
+          <div class="admin-account" aria-live="polite">
+            <p class="admin-account__label">로그인한 공급업체</p>
+            <p class="admin-account__value" id="admin-supplier-name">-</p>
+            <button class="btn ghost small" type="button" id="logout-button">로그아웃</button>
           </div>
         </header>
 
         <form id="product-form" class="admin-form" autocomplete="off" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="supplier-id">공급업체</label>
-            <select id="supplier-id" name="supplierId" required>
-              <option value="">공급업체를 선택하세요</option>
-            </select>
+          <input id="supplier-id" name="supplierId" type="hidden">
+
+          <div class="form-group form-group--readonly">
+            <label>공급업체</label>
+            <div class="supplier-chip" id="supplier-summary">로그인이 필요합니다</div>
+            <p class="form-hint">공급업체 로그인 후 자동으로 채워집니다.</p>
           </div>
 
           <div class="form-row">
