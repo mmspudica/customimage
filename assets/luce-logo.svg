@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">LUCE Planetary Logo</title>
-  <desc id="desc">Minimal black planet with surrounding ring representing the LUCE brand.</desc>
-  <circle cx="60" cy="50" r="24" fill="black"/>
-  <path d="M52 40c2.8-4.4 7.2-7 12.6-7 10.4 0 18.4 8 18.4 18.4 0 4.6-1.6 8.8-4.6 12.2" stroke="white" stroke-width="3.2" stroke-linecap="round"/>
-  <path d="M18 55c12.6-10.8 43-21.4 76-19.2 8.4.6 13.8 2.2 16.4 4.4 2.2 1.8 2.4 4.2.6 6.4-6 7.6-28.2 18.4-58.2 22.2-22.6 2.8-38.4.6-42.6-3.2-1.8-1.8-1.8-3.8.2-6.2z" stroke="black" stroke-width="6" stroke-linecap="round"/>
-  <path d="M18 55c12.6-10.8 43-21.4 76-19.2 8.4.6 13.8 2.2 16.4 4.4 2.2 1.8 2.4 4.2.6 6.4-6 7.6-28.2 18.4-58.2 22.2-22.6 2.8-38.4.6-42.6-3.2-1.8-1.8-1.8-3.8.2-6.2z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-  <text x="60" y="102" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="22" letter-spacing="0.24em" text-anchor="middle" fill="black">LUCE</text>
+<svg width="160" height="200" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LUCE Brand Mark</title>
+  <desc id="desc">Black planet with orbiting ring above the LUCE logotype.</desc>
+  <g fill="none" fill-rule="evenodd">
+    <circle cx="80" cy="72" r="48" fill="#000000"/>
+    <path d="M63.2 52.6c7.2-7.8 18.5-11.2 29.1-8 12.4 3.7 19.7 16.4 16.2 29-1.9 6.8-6.9 12.4-13.5 15.4-6.6 3-14.3 2.8-20.8-0.7" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+    <path d="M41.6 68.4c-23 8-36.4 18.8-34.6 27.8 2 9.8 20.3 14.6 45.4 14.6 29.8 0 69.2-6.8 100.4-20.2 23-9.8 29.8-20.6 24.4-28.8-4.6-6.8-18.4-10.6-39.2-10.6-24.6 0-57.8 5.8-96.4 17.2z" stroke="#000000" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M41.6 68.4c-23 8-36.4 18.8-34.6 27.8 2 9.8 20.3 14.6 45.4 14.6 29.8 0 69.2-6.8 100.4-20.2 23-9.8 29.8-20.6 24.4-28.8-4.6-6.8-18.4-10.6-39.2-10.6-24.6 0-57.8 5.8-96.4 17.2z" fill="#000000" fill-opacity="0.05"/>
+    <text x="80" y="168" text-anchor="middle" font-family="'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="32" font-weight="700" letter-spacing="0.12em" fill="#000000">LUCE</text>
+  </g>
 </svg>
