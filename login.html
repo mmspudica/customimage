@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUCE Supplier Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body class="auth-body">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">
+        <img src="assets/luce-logo.svg" alt="LUCE" />
+        <span class="logo__text">LUCE LOOKBOOK</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html#lookbook">룩북</a>
+        <a href="index.html#selection">셀렉션</a>
+        <a href="index.html#studio">스튜디오 셀렉션</a>
+        <a href="index.html#checklist">체크리스트</a>
+        <a href="admin.html">어드민</a>
+      </nav>
+      <a class="btn ghost" href="signup.html">회원가입</a>
+    </div>
+  </header>
+
+  <main class="auth-main">
+    <section class="auth-section">
+      <div class="container auth-container">
+        <div class="auth-panel">
+          <p class="tag">SUPPLIER LOGIN</p>
+          <h1>공급업체 로그인</h1>
+          <p class="section-subtitle">가입 시 설정한 이메일과 비밀번호를 입력하면 어드민에서 상품을 등록할 수 있습니다.</p>
+
+          <form id="supplier-login-form" class="auth-form" autocomplete="off">
+            <div class="form-group">
+              <label for="login-email">이메일</label>
+              <input id="login-email" name="email" type="email" placeholder="예: supplier001@lookbook.app" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+              <label for="login-password">비밀번호</label>
+              <input id="login-password" name="password" type="password" placeholder="비밀번호를 입력하세요" autocomplete="current-password" required>
+            </div>
+
+            <button class="btn primary" type="submit">로그인</button>
+            <p class="form-feedback" id="login-feedback" role="status" aria-live="polite"></p>
+          </form>
+
+          <p class="auth-hint">아직 계정이 없나요? <a href="supplier-signup.html">공급업체 회원가입</a>에서 신청하세요.<br>테스트 계정: test@test.com / test1234</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer auth-footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="logo">
+          <img src="assets/luce-logo.svg" alt="LUCE" />
+          <span class="logo__text">LUCE LOOKBOOK</span>
+        </div>
+        <p>공급업체·셀러·스튜디오를 잇는 라이브 준비 플랫폼.</p>
+      </div>
+      <div class="footer-meta">
+        <p>도움이 필요하면 luce@lookbook.app 으로 문의해주세요.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/demo-data.js" defer></script>
+  <script src="scripts/auth.js" defer></script>
+</body>
+</html>
