@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 - LUCE Lookbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/luce-logo.svg" alt="LUCE" />
+        <span class="logo__text">LUCE LOOKBOOK</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html#lookbook">룩북</a>
+        <a href="index.html#selection">셀렉션</a>
+        <a href="index.html#studio">스튜디오 셀렉션</a>
+        <a href="index.html#checklist">체크리스트</a>
+      </nav>
+      <a class="btn ghost current" href="signup.html" aria-current="page">회원가입</a>
+    </div>
+  </header>
+
+  <main class="signup-main">
+    <section class="signup-hero">
+      <div class="container">
+        <div class="signup-hero-card">
+          <p class="tag">JOIN LUCE</p>
+          <h1>회원 유형을 선택해주세요</h1>
+          <p class="section-subtitle">공급업체, 셀러, 일반회원 중 원하는 유형을 선택하면 맞춤 가입 페이지로 이동합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="signup-section" aria-labelledby="signup-choice-heading">
+      <div class="container">
+        <h2 id="signup-choice-heading" class="visually-hidden">회원 유형 선택</h2>
+        <div class="signup-grid signup-choice-grid">
+          <a class="signup-card signup-card--link" href="supplier-signup.html">
+            <div class="signup-card-header">
+              <h3>공급업체</h3>
+              <p>카테고리별 표준 정보를 갖춘 룩을 올려 셀러와 스튜디오에 빠르게 소개하세요.</p>
+            </div>
+            <span class="btn primary">공급업체 가입</span>
+          </a>
+
+          <a class="signup-card signup-card--link" href="seller-signup.html">
+            <div class="signup-card-header">
+              <h3>셀러</h3>
+              <p>룩북 셀렉션과 스튜디오 요청을 위한 기본 정보를 등록해 방송 준비 속도를 높입니다.</p>
+            </div>
+            <span class="btn secondary">셀러 가입</span>
+          </a>
+
+          <a class="signup-card signup-card--link" href="member-signup.html">
+            <div class="signup-card-header">
+              <h3>일반회원</h3>
+              <p>라이브 커머스 인사이트와 LUCE 소식을 받아볼 수 있는 일반 회원으로 참여하세요.</p>
+            </div>
+            <span class="btn ghost">일반회원 가입</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="logo">
+          <img src="assets/luce-logo.svg" alt="LUCE" />
+          <span class="logo__text">LUCE LOOKBOOK</span>
+        </div>
+        <p>동대문 라이브커머스를 위한 준비 도구. 고른다 → 준비한다 → 방송한다.</p>
+      </div>
+      <div class="footer-meta">
+        <p>문의: luce@lookbook.app · 02-000-0000</p>
+        <p>© 2025 LUCE Commerce Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/demo-data.js" defer></script>
+  <script src="scripts/app.js" defer></script>
+</body>
+</html>
