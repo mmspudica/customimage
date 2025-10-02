@@ -51,6 +51,10 @@ function translateCategory(category) {
       return '건기식';
     case 'goods':
       return '잡화';
+    case 'food':
+      return '식품';
+    case 'etc':
+      return '기타';
     default:
       return category;
   }
@@ -599,6 +603,14 @@ function setupSignupForms() {
     return;
   }
 
+  const updateCounters = form => {
+    const countedFields = form.querySelectorAll('[data-count-max]');
+    countedFields.forEach(field => {
+      const event = new Event('input');
+      field.dispatchEvent(event);
+    });
+  };
+
   forms.forEach(form => {
     const feedbackId = form.dataset.feedbackTarget;
     const feedback = feedbackId ? document.getElementById(feedbackId) : null;
@@ -609,9 +621,40 @@ function setupSignupForms() {
 
       const data = new FormData(form);
       const payload = {};
-      data.forEach((value, key) => {
-        payload[key] = typeof value === 'string' ? value.trim() : value;
+      const attachments = [];
+
+      data.forEach((value, rawKey) => {
+        const key = rawKey.endsWith('[]') ? rawKey.slice(0, -2) : rawKey;
+
+        if (value instanceof File) {
+          if (value.name) {
+            attachments.push({
+              name: value.name,
+              size: value.size,
+              type: value.type,
+            });
+          }
+          return;
+        }
+
+        const normalized = typeof value === 'string' ? value.trim() : value;
+        if (!key) {
+          return;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(payload, key)) {
+          if (!Array.isArray(payload[key])) {
+            payload[key] = [payload[key]];
+          }
+          payload[key].push(normalized);
+        } else {
+          payload[key] = normalized;
+        }
       });
+
+      if (attachments.length) {
+        payload.attachments = attachments;
+      }
 
       if (!payload.email || !payload.password) {
         if (feedback) {
@@ -624,11 +667,42 @@ function setupSignupForms() {
       window.LUCE_DEMO?.addSignup(type, payload);
 
       form.reset();
+      updateCounters(form);
+
       if (feedback) {
         feedback.textContent = '신청이 접수되었습니다. 운영팀이 곧 연락드릴게요.';
         feedback.classList.remove('error');
       }
     });
+  });
+}
+
+function setupCharacterCounters() {
+  const fields = document.querySelectorAll('[data-count-max]');
+  if (!fields.length) {
+    return;
+  }
+
+  fields.forEach(field => {
+    const max = parseInt(field.dataset.countMax, 10);
+    if (!max) {
+      return;
+    }
+
+    const group = field.closest('.form-group');
+    const counter = group ? group.querySelector('[data-count-output]') : null;
+    if (!counter) {
+      return;
+    }
+
+    const update = () => {
+      const length = field.value.length;
+      counter.textContent = String(length);
+      counter.dataset.state = length > max ? 'over' : 'ok';
+    };
+
+    field.addEventListener('input', update);
+    update();
   });
 }
 
@@ -676,6 +750,7 @@ function initializeLookbook() {
 
 function initializeSignup() {
   setupSignupForms();
+  setupCharacterCounters();
 }
 
 function boot() {

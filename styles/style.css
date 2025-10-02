@@ -934,6 +934,98 @@ textarea:focus {
   font-weight: 600;
 }
 
+.form-fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-fieldset legend {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 8px;
+}
+
+.option-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.option-pill input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.option-pill span {
+  pointer-events: none;
+}
+
+.option-pill:focus-within {
+  outline: 2px solid rgba(0, 0, 0, 0.5);
+  outline-offset: 2px;
+}
+
+.option-pill:has(input:checked) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+.option-pill input:checked + span {
+  font-weight: 600;
+}
+
+.form-hint--count {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+[data-count-output] {
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  text-align: right;
+}
+
+[data-count-output][data-state='over'] {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.form-note {
+  background: rgba(0, 0, 0, 0.04);
+  border-left: 3px solid var(--accent-strong);
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
 .request-timeline {
   margin-top: 30px;
   background: rgba(0, 0, 0, 0.04);

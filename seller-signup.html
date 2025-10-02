@@ -43,53 +43,148 @@
         <article class="signup-card">
           <header class="signup-card-header">
             <h3>셀러 정보</h3>
-            <p>라이브 방송 운영 방식과 준비 현황을 공유해 빠른 피드백을 받아보세요.</p>
+            <p>방송 콘셉트와 운영 경험을 공유해 주시면 맞춤형 룩북과 스튜디오 가이드를 제안드립니다.</p>
           </header>
-          <form class="signup-form" id="seller-form" data-signup-type="seller" data-feedback-target="seller-feedback">
+          <form class="signup-form" id="seller-form" data-signup-type="sellers" data-feedback-target="seller-feedback" autocomplete="off">
             <div class="form-group">
               <label for="seller-brand">브랜드/셀러명</label>
-              <input id="seller-brand" name="brand" type="text" placeholder="예) 루체 셀러" required>
+              <input id="seller-brand" name="brand" type="text" placeholder="예) 루체 셀렉트" required>
             </div>
+
+            <fieldset class="form-fieldset">
+              <legend>운영 형태</legend>
+              <div class="option-group" role="radiogroup" aria-label="운영 형태">
+                <label class="option-pill">
+                  <input type="radio" name="businessType" value="solo" required>
+                  <span>개인 셀러</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="businessType" value="corporate">
+                  <span>법인 사업자</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="businessType" value="team">
+                  <span>크리에이터 팀</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend>대표 카테고리</legend>
+              <div class="option-group" role="radiogroup" aria-label="대표 카테고리">
+                <label class="option-pill">
+                  <input type="radio" name="primaryCategory" value="fashion" required>
+                  <span>패션</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="primaryCategory" value="beauty">
+                  <span>뷰티</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="primaryCategory" value="wellness">
+                  <span>건기식</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="primaryCategory" value="goods">
+                  <span>잡화</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="primaryCategory" value="etc">
+                  <span>기타</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-group">
+              <label for="seller-introduction">셀러 소개</label>
+              <textarea id="seller-introduction" name="introduction" rows="4" maxlength="300" data-count-max="300" placeholder="브랜드 톤, 고객층, 라이브 강점을 300자 이내로 알려주세요." required></textarea>
+              <div class="form-hint form-hint--count"><span data-count-output>0</span> / 300자</div>
+            </div>
+
+            <fieldset class="form-fieldset">
+              <legend>주요 라이브 채널</legend>
+              <div class="option-group" role="radiogroup" aria-label="주요 라이브 채널">
+                <label class="option-pill">
+                  <input type="radio" name="mainChannel" value="네이버 쇼핑라이브" required>
+                  <span>네이버 쇼핑라이브</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="mainChannel" value="카카오 쇼핑라이브">
+                  <span>카카오 쇼핑라이브</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="mainChannel" value="틱톡">
+                  <span>틱톡</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="mainChannel" value="자체몰">
+                  <span>자체몰</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="mainChannel" value="기타">
+                  <span>기타</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend>월 평균 라이브 횟수</legend>
+              <div class="option-group" role="radiogroup" aria-label="월 평균 라이브 횟수">
+                <label class="option-pill">
+                  <input type="radio" name="monthlyLives" value="1-2" required>
+                  <span>월 1~2회</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="monthlyLives" value="3-4">
+                  <span>월 3~4회</span>
+                </label>
+                <label class="option-pill">
+                  <input type="radio" name="monthlyLives" value="5+">
+                  <span>월 5회 이상</span>
+                </label>
+              </div>
+            </fieldset>
+
             <div class="form-row">
               <div class="form-group">
-                <label for="seller-contact">연락처</label>
-                <input id="seller-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
+                <label for="seller-manager">담당자명</label>
+                <input id="seller-manager" name="manager" type="text" placeholder="담당자명을 입력하세요" required>
               </div>
               <div class="form-group">
-                <label for="seller-email">이메일</label>
-                <input id="seller-email" name="email" type="email" placeholder="contact@example.com" required>
+                <label for="seller-contact">전화번호</label>
+                <input id="seller-contact" name="phone" type="tel" placeholder="010-0000-0000" required>
               </div>
             </div>
-            <div class="form-group">
-              <label for="seller-password">비밀번호</label>
-              <input id="seller-password" name="password" type="password" placeholder="8자 이상 비밀번호" minlength="8" autocomplete="new-password" required>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="seller-email">이메일</label>
+                <input id="seller-email" name="email" type="email" placeholder="contact@example.com" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label for="seller-password">로그인 비밀번호</label>
+                <input id="seller-password" name="password" type="password" placeholder="8자 이상 비밀번호" minlength="8" autocomplete="new-password" required>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="seller-channel">주요 판매 채널</label>
-              <select id="seller-channel" name="channel" required>
-                <option value="">선택</option>
-                <option value="네이버 쇼핑라이브">네이버 쇼핑라이브</option>
-                <option value="카카오 쇼핑라이브">카카오 쇼핑라이브</option>
-                <option value="틱톡">틱톡</option>
-                <option value="자체몰">자체몰</option>
-                <option value="기타">기타</option>
-              </select>
+              <label for="seller-link">주요 판매 링크</label>
+              <input id="seller-link" name="channelLink" type="url" placeholder="https:// 또는 스토어 아이디">
             </div>
+
             <div class="form-group">
-              <label for="seller-experience">라이브 커머스 경험</label>
-              <select id="seller-experience" name="experience">
-                <option value="">선택</option>
-                <option value="none">처음이에요</option>
-                <option value="1-5">1~5회 진행</option>
-                <option value="6-10">6~10회 진행</option>
-                <option value="10+">10회 이상</option>
-              </select>
+              <label for="seller-date">상담 희망일</label>
+              <input id="seller-date" name="preferredDate" type="date">
             </div>
+
             <div class="form-group">
-              <label for="seller-goal">첫 달 목표</label>
-              <textarea id="seller-goal" name="notes" rows="4" placeholder="방송 횟수, 매출 목표, 준비 중인 상품 라인을 적어주세요"></textarea>
+              <label for="seller-request">루체에 전달하고 싶은 요청</label>
+              <textarea id="seller-request" name="notes" rows="3" placeholder="필요한 공급 카테고리, 원하는 스튜디오 지원 등을 적어주세요."></textarea>
             </div>
-            <button class="btn secondary" type="submit">셀러 가입 신청</button>
+
+            <p class="form-note">신청 후 24시간 이내에 셀러 전담 매니저가 연락드려 라이브 일정과 룩시트 활용 방법을 안내해드립니다.</p>
+
+            <button class="btn secondary" type="submit">셀러 신청 접수</button>
             <p class="form-feedback" id="seller-feedback" role="status" aria-live="polite"></p>
           </form>
         </article>

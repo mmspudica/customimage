@@ -11,6 +11,7 @@
     {
       id: 'sup-luce',
       brand: 'LUCE Supply Lab',
+      company: '주식회사 루체 인터내셔널',
       email: 'test@test.com',
       password: 'test1234',
       phone: '010-1234-5678',
